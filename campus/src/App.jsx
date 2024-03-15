@@ -5,6 +5,8 @@ import { Root } from './routes/root';
 import { ROUTES } from './constants/routes';  
 import Home from './routes/home';
 
+import './App.css';
+
 const router = createBrowserRouter([
   {
     path:  ROUTES.ROOT,

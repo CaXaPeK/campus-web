@@ -13,14 +13,11 @@ const RightMenu = ({ mode }) => {
           </>
         }
       >
-        <Menu.Item key="project">
-          <CodeOutlined /> Projects
-        </Menu.Item>
         <Menu.Item key="about-us">
-          <UserOutlined /> Profile
+          <UserOutlined /> Профиль
         </Menu.Item>
         <Menu.Item key="log-out">
-          <LogoutOutlined /> Logout
+          <LogoutOutlined /> Выйти
         </Menu.Item>
       </Menu.SubMenu>
     </Menu>
