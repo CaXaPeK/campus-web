@@ -26,7 +26,6 @@
   .logo a {
     display: inline-block;
     font-size: 20px;
-    text-transform: capitalize;
   }
   
   .navbar-menu {
@@ -112,3 +111,6 @@
   
   /* Navbar End */
   
+  body,html {
+    margin: 0;
+    } 

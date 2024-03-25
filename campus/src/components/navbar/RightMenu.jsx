@@ -1,4 +1,3 @@
-import React from "react";
 import { Menu, Avatar } from "antd";
 import { UserOutlined, CodeOutlined, LogoutOutlined } from "@ant-design/icons";
 
@@ -9,7 +8,7 @@ const RightMenu = ({ mode }) => {
         title={
           <>
             <Avatar icon={<UserOutlined />} />
-            <span className="username">John Doe</span>
+            <span className="username">user@mail.com</span>
           </>
         }
       >

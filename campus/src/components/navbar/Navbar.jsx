@@ -25,7 +25,7 @@ const Navbar = () => {
       <Layout>
         <Layout.Header className="nav-header">
           <div className="logo">
-            <h3 className="brand-font">Кампусные курсы</h3>
+            <a className="brand-font">Кампусные курсы</a>
           </div>
           <div className="navbar-menu">
             <div className="leftMenu">
@@ -39,7 +39,7 @@ const Navbar = () => {
             </div>
 
             <Drawer
-              title={"Brand Here"}
+              title={"Кампусные курсы"}
               placement="right"
               closable={true}
               onClose={showDrawer}
