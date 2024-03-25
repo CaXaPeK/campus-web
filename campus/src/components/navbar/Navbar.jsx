@@ -23,7 +23,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <Layout>
-        <Layout.Header className="nav-header">
+        <Layout.Header className="nav-header" >
           <div className="logo">
             <a className="brand-font">Кампусные курсы</a>
           </div>
