@@ -5,11 +5,10 @@ import { ERROR_MESSAGES } from '../constants/errorMessages';
 const LoginPage = () => {
 
     const onFinish = (values) => {
-        //console.log('Success:', values);
         axiosLogin(values.email, values.password);
     };
     const onFinishFailed = (errorInfo) => {
-        //console.log('Failed:', errorInfo);
+        
     };
 
     return (

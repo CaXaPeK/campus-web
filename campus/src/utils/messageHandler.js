@@ -13,3 +13,7 @@ export const showError = (text) => {
 export const showLoginFailed = () => {
     showError(ERROR_MESSAGES.LOGIN_FAILED);
 }
+
+export const showEmailTaken = () => {
+    showError(ERROR_MESSAGES.EMAIL_TAKEN);
+}

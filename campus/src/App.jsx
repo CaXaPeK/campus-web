@@ -5,6 +5,7 @@ import { Root } from './routes/root';
 import { ROUTES } from './constants/routes';  
 import Home from './routes/home';
 import LoginPage from './routes/login';
+import RegisterPage from './routes/registration';
 
 import './App.css';
 
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.LOGIN,
         element: <LoginPage />,
+      },
+      {
+        path: ROUTES.REGISTRATION,
+        element: <RegisterPage />,
       }
     ],
   },

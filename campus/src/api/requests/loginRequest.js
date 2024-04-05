@@ -14,9 +14,8 @@ export const axiosLogin = async (email, password) => {
         const token = await api.post(API_URLS.LOGIN, data);
         localStorage.setItem("token", token.data.token);
         console.log(token.data.token);
-        //window.location.href = "/";
+        window.location.href = "/";
     } catch (error) {
-        //console.error("Error during registration:", error);
         var errorMessage = error.response.data.message;
         if (errorMessage == "Login failed") {
             showLoginFailed();
