@@ -3,4 +3,5 @@ export const ERROR_MESSAGES = {
 
     ENTER_EMAIL: 'Введите электронную почту.',
     ENTER_PASSWORD: 'Введите пароль.',
+    NOT_AN_EMAIL: 'Это не адрес электронной почты.'
 }

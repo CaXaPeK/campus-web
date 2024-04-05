@@ -44,10 +44,8 @@ const LoginPage = () => {
                         label="Электронная почта"
                         name="email"
                         rules={[
-                            {
-                            required: true,
-                            message: ERROR_MESSAGES.ENTER_EMAIL,
-                            },
+                            { required: true, message: ERROR_MESSAGES.ENTER_EMAIL },
+                            { pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", message: ERROR_MESSAGES.NOT_AN_EMAIL }
                         ]}
                         >
                         <Input />
