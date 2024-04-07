@@ -8,6 +8,7 @@ import LoginPage from './routes/login';
 import RegisterPage from './routes/registration';
 
 import './App.css';
+import ProfilePage from './routes/profile';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.REGISTRATION,
         element: <RegisterPage />,
+      },
+      {
+        path: ROUTES.PROFILE,
+        element: <ProfilePage />,
       }
     ],
   },
