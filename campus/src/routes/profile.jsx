@@ -1,14 +1,33 @@
-import { Card, DatePicker, Form, Input } from "antd";
+import { Button, Card, DatePicker, Form, Input } from "antd";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
+import { useGetApi } from "../api/hook/useGetApi";
+import { API_URLS } from "../constants/apiUrls";
+import { useEffect, useState } from "react";
+import dayjs from 'dayjs';
+import { axiosProfilePut } from "../api/requests/profilePutRequest";
 
 const ProfilePage = () => {
-    const onFinish = (values) => {
+    const [data, loading, authorized, error] = useGetApi(null, API_URLS.PROFILE);
+    const [form] = Form.useForm();
 
+    const onFinish = (values) => {
+        axiosProfilePut(values.name, values.birthdate);
     };
 
     function disabledDate(current) {
         return current && current.valueOf() > Date.now();
     }
+
+    useEffect(() => {
+        if (!loading && data !== null) {
+            form.setFieldsValue({
+                name: data.fullName,
+                email: data.email,
+                birthdate: dayjs(data.birthDate.split('T')[0], "YYYY-MM-DD")
+            });
+        }
+    }, [loading, data]);
+    
 
     return (
         <Card
@@ -19,6 +38,8 @@ const ProfilePage = () => {
         >
             <Form
             name="profileEdit"
+            form={form}
+            disabled={loading || !authorized}
             labelCol={{
                 span: 8,
             }}
@@ -47,7 +68,6 @@ const ProfilePage = () => {
                 name="email"
                 >
                     <Input
-                    defaultValue="user@example.com"
                     disabled
                     />
                 </Form.Item>
@@ -65,6 +85,17 @@ const ProfilePage = () => {
                     disabledDate={disabledDate}
                     style={{ width: '100%' }}
                     />
+                </Form.Item>
+
+                <Form.Item
+                wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                }}
+                >
+                    <Button type="primary" htmlType="submit">
+                        Сохранить изменения
+                    </Button>
                 </Form.Item>
             </Form>
         </Card>

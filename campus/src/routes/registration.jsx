@@ -138,10 +138,10 @@ const RegistrationPage = () => {
                     span: 16,
                 }}
                 >
-                <Button type="primary" htmlType="submit">
-                    Зарегистрироваться
-                </Button>
-            </Form.Item>
+                    <Button type="primary" htmlType="submit">
+                        Зарегистрироваться
+                    </Button>
+                </Form.Item>
             </Form>
         </Card>
     );

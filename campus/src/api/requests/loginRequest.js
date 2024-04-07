@@ -8,12 +8,11 @@ export const axiosLogin = async (email, password) => {
         password: password
     };
 
-    console.log(data);
+    //console.log(data);
   
     try {
         const token = await api.post(API_URLS.LOGIN, data);
         localStorage.setItem("token", token.data.token);
-        console.log(token.data.token);
         window.location.href = "/";
     } catch (error) {
         var errorMessage = error.response.data.message;

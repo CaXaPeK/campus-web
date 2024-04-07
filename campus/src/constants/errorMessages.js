@@ -16,5 +16,9 @@ export const ERROR_MESSAGES = {
     SHOULD_BE_THREE_WORDS: 'ФИО должно состоять из трёх слов.',
     PASSWORD_SHORT: 'Пароль должен состоять как минимум из 6 символов.',
     PASSWORD_NO_NUMBERS: 'Пароль должен содержать как минимум 1 цифру.',
-    PASSWORDS_DONT_MATCH: 'Введенные пароли не совпадают.'
+    PASSWORDS_DONT_MATCH: 'Введенные пароли не совпадают.',
+
+    UNAUTHORIZED: 'Вы не авторизованы.',
+
+    PROFILE_EDIT_SUCCESS: 'Профиль изменён.'
 }

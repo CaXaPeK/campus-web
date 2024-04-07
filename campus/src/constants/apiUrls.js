@@ -1,5 +1,6 @@
 export const API_URLS = {
     BASE: 'https://camp-courses.api.kreosoft.space/',
     LOGIN: 'login',
-    REGISTRATION: 'registration'
+    REGISTRATION: 'registration',
+    PROFILE: 'profile'
 }
