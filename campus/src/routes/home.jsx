@@ -1,6 +1,7 @@
 const Home = () => {
     return (
-      <div>
+      <div className="welcome">
+          Добро пожаловать<br/> в систему кампусных курсов!
       </div>
     );
   }

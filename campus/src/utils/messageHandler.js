@@ -31,6 +31,10 @@ export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }
 
+export const showAlreadyLoggedOut = () => {
+    showError(ERROR_MESSAGES.ALREADY_LOGGED_OUT);
+}
+
 export const showProfileEditSuccess = () => {
     showSuccess(ERROR_MESSAGES.PROFILE_EDIT_SUCCESS);
 }

@@ -3,7 +3,7 @@ export const ROUTES = {
     LOGIN: 'login',
     REGISTRATION: 'registration',
     PROFILE: 'profile',
-    GROPUS: 'groups',
+    GROUPS: 'groups',
     COURSES: 'groups/:groupId',
     COURSE: 'courses/:courseId',
     MY_COURSES: 'courses/my',

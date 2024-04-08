@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { Layout, Button, Drawer } from "antd";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
@@ -25,7 +25,7 @@ const Navbar = () => {
       <Layout>
         <Layout.Header className="nav-header" >
           <div className="logo">
-            <a className="brand-font">Кампусные курсы</a>
+            <a className="brand-font" href="/">Кампусные курсы</a>
           </div>
           <div className="navbar-menu">
             <div className="leftMenu">

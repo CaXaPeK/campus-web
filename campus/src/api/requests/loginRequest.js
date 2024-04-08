@@ -7,14 +7,15 @@ export const axiosLogin = async (email, password) => {
         email: email,
         password: password
     };
-
-    //console.log(data);
   
     try {
         const token = await api.post(API_URLS.LOGIN, data);
         localStorage.setItem("token", token.data.token);
+        localStorage.setItem("email", data.email);
+
         window.location.href = "/";
     } catch (error) {
+        console.log(error);
         var errorMessage = error.response.data.message;
         if (errorMessage == "Login failed") {
             showLoginFailed();
@@ -23,5 +24,5 @@ export const axiosLogin = async (email, password) => {
             errorMessage = error.response.data.title;
             showError(errorMessage);
         }
-      }
+    }
   };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { api } from "../axiosInstance";
 import { showUnauthorizedError } from "../../utils/messageHandler";
 
-export const useGetApi = (stub, url) => {
+export const useGetApi = (stub, url, notifyAuthorized) => {
     const [data, setData] = useState(stub);
     const [loading, setLoading] = useState(true);
     const [authorized, setAuthorized] = useState(false);
@@ -23,7 +23,7 @@ export const useGetApi = (stub, url) => {
                 setError(error);
                 setAuthorized(false);
 
-                if (error.response.status == 401) {
+                if (error.response.status == 401 && notifyAuthorized) {
                     showUnauthorizedError();
                 }
             }

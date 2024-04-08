@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { axiosProfilePut } from "../api/requests/profilePutRequest";
 
 const ProfilePage = () => {
-    const [data, loading, authorized, error] = useGetApi(null, API_URLS.PROFILE);
+    const [data, loading, authorized, error] = useGetApi(null, API_URLS.PROFILE, true);
     const [form] = Form.useForm();
 
     const onFinish = (values) => {

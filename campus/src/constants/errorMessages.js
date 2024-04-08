@@ -19,6 +19,7 @@ export const ERROR_MESSAGES = {
     PASSWORDS_DONT_MATCH: 'Введенные пароли не совпадают.',
 
     UNAUTHORIZED: 'Вы не авторизованы.',
+    ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
 
     PROFILE_EDIT_SUCCESS: 'Профиль изменён.'
 }
