@@ -1,9 +1,9 @@
-import { Button, Card, DatePicker, Form, Input } from "antd";
+import {Button, Card, ConfigProvider, DatePicker, Form, Input} from "antd";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { useGetApi } from "../api/hook/useGetApi";
 import { API_URLS } from "../constants/apiUrls";
 import { useEffect, useState } from "react";
-import dayjs from 'dayjs';
+import dayjs, {locale} from 'dayjs';
 import { axiosProfilePut } from "../api/requests/profilePutRequest";
 
 const ProfilePage = () => {
@@ -80,11 +80,12 @@ const ProfilePage = () => {
                 ]}
                 >
                     <DatePicker
-                    format={"DD.MM.YYYY"}
-                    placeholder=""
-                    disabledDate={disabledDate}
-                    style={{ width: '100%' }}
+                        format={"DD.MM.YYYY"}
+                        placeholder=""
+                        disabledDate={disabledDate}
+                        style={{ width: '100%' }}
                     />
+
                 </Form.Item>
 
                 <Form.Item

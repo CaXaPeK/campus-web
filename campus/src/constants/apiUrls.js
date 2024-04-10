@@ -4,5 +4,6 @@ export const API_URLS = {
     REGISTRATION: 'registration',
     PROFILE: 'profile',
     ROLES: 'roles',
-    LOGOUT: 'logout'
+    LOGOUT: 'logout',
+    GROUPS: 'groups'
 }

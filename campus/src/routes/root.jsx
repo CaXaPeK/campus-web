@@ -5,10 +5,10 @@ const { Footer, Content } = Layout;
 
 export const Root = () => {
   return (
-    <Layout style={{ height: "100vh"}}>
+    <Layout style={{ minHeight: "100vh"}}>
       <Navbar />
-      <Content>
-        <Flex style={{height: '100%'}} justify='center' align='center'>
+      <Content >
+        <Flex style={{height: '100%', flexDirection: 'column'}} justify='center' align='center'>
           <Outlet />
         </Flex>
       </Content>

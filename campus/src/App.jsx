@@ -9,6 +9,9 @@ import RegisterPage from './routes/registration';
 
 import './App.css';
 import ProfilePage from './routes/profile';
+import GroupsPage from "./routes/groups.jsx";
+import {ConfigProvider} from "antd";
+import ruRU from 'antd/locale/ru_RU.js'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.PROFILE,
         element: <ProfilePage />,
+      },
+      {
+        path: ROUTES.GROUPS,
+        element: <GroupsPage />,
       }
     ],
   },
@@ -45,7 +52,9 @@ const queryClient = new QueryClient({
 });
 
 export const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <RouterProvider router={router} />
-  </QueryClientProvider>
+  <ConfigProvider locale={ruRU}>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  </ConfigProvider>
 );
