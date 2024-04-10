@@ -1,7 +1,9 @@
+import { Image } from "antd";
+
 const Home = () => {
     return (
       <div className="welcome">
-          Добро пожаловать<br/> в систему кампусных курсов!
+          <Image src="/src/images/wordart.png" width={"75%"} preview={false}/>
       </div>
     );
   }
