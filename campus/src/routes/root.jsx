@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router';
 import Navbar from '../components/navbar/Navbar';
 import { Flex, Layout, Space } from 'antd';
+import {ROUTES} from "../constants/routes.js";
 const { Footer, Content } = Layout;
 
 export const Root = () => {
-  return (
+    document.title = ROUTES.RUS_ROOT;
+
+    return (
     <Layout style={{ minHeight: "100vh"}}>
       <Navbar />
       <Content >

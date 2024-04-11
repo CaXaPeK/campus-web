@@ -1,8 +1,11 @@
 import { Card, Form, Input, Button, DatePicker } from "antd";
 import { ERROR_MESSAGES } from '../constants/errorMessages';
 import { axiosRegistration } from "../api/requests/registrationRequest";
+import {ROUTES} from "../constants/routes.js";
 
 const RegistrationPage = () => {
+    document.title = ROUTES.RUS_REGISTRATION;
+
     const onFinish = (values) => {
         axiosRegistration(
             values.surname + ' ' + values.name + ' ' + values.secondName,

@@ -1,8 +1,10 @@
 import { App, Card, Space, Button, Form, Input } from 'antd';
 import { axiosLogin } from '../api/requests/loginRequest';
 import { ERROR_MESSAGES } from '../constants/errorMessages';
+import {ROUTES} from "../constants/routes.js";
 
 const LoginPage = () => {
+    document.title = ROUTES.RUS_LOGIN;
 
     const onFinish = (values) => {
         axiosLogin(values.email, values.password);

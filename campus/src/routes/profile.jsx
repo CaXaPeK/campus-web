@@ -5,8 +5,11 @@ import { API_URLS } from "../constants/apiUrls";
 import { useEffect, useState } from "react";
 import dayjs, {locale} from 'dayjs';
 import { axiosProfilePut } from "../api/requests/profilePutRequest";
+import {ROUTES} from "../constants/routes.js";
 
 const ProfilePage = () => {
+    document.title = ROUTES.RUS_PROFILE;
+
     const [data, loading, authorized, error] = useGetApi(null, API_URLS.PROFILE, true);
     const [form] = Form.useForm();
 
