@@ -10,6 +10,7 @@ export const ERROR_MESSAGES = {
     ENTER_SECOND_NAME: 'Введите отчество.',
     ENTER_FIO: 'Введите ФИО.',
     SELECT_DATE: 'Укажите дату.',
+    ENTER_GROUP_NAME: 'Введите название группы.',
 
     NOT_AN_EMAIL: 'Это не адрес электронной почты.',
     TOO_MANY_WORDS: 'Введите только одно слово.',
@@ -21,5 +22,6 @@ export const ERROR_MESSAGES = {
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
 
-    PROFILE_EDIT_SUCCESS: 'Профиль изменён.'
+    PROFILE_EDIT_SUCCESS: 'Профиль изменён.',
+    GROUP_RENAME_SUCCESS: 'Группа переименована.'
 }

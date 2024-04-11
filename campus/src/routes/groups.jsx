@@ -4,13 +4,15 @@ import {useGetApi} from "../api/hook/useGetApi.js";
 import {API_URLS} from "../constants/apiUrls.js";
 import {ROUTES} from "../constants/routes.js";
 import {useState, useEffect} from "react";
+import {ERROR_MESSAGES} from "../constants/errorMessages.js";
+import {axiosGroupPut} from "../api/requests/groupPutRequest.js";
 
 const GroupsPage = () => {
     document.title = ROUTES.RUS_GROUPS;
     const [form] = Form.useForm();
     const [data, loading, authorized, error] = useGetApi([], API_URLS.GROUPS, true);
 
-    var listData = data.length > 0 ? data.map(group => ({
+    let listData = data.length > 0 ? data.map(group => ({
         title: group.name,
         description: group.id,
     })) : [];
@@ -22,8 +24,13 @@ const GroupsPage = () => {
         setSelectedGroupIndex(groupIndex);
         setIsModalOpen(true);
     };
-    const handleOk = () => {
+    const handleFinish = (values) => {
+        axiosGroupPut(data[selectedGroupIndex].id, values.title);
+        data[selectedGroupIndex].name = values.title;
         setIsModalOpen(false);
+    }
+    const handleOk = () => {
+        form.submit();
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -35,20 +42,19 @@ const GroupsPage = () => {
                 title: data[selectedGroupIndex].name
             });
         }
-        //console.log(data[selectedGroupIndex].name)
     }, [form, data, selectedGroupIndex]);
 
     return (
         <>
             <Modal title="Введите новое название группы" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Сохранить'>
-                <Form
-                    form={form}
-                >
-                    <Input
-                        name='title'
-                    />
+                <Form form={form} onFinish={handleFinish} >
+                    <Form.Item
+                        name='title' rules={[
+                        { required: true, message: ERROR_MESSAGES.ENTER_GROUP_NAME },]}
+                    >
+                        <Input />
+                    </Form.Item>
                 </Form>
-
             </Modal>
 
             <List

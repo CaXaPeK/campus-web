@@ -38,3 +38,7 @@ export const showAlreadyLoggedOut = () => {
 export const showProfileEditSuccess = () => {
     showSuccess(ERROR_MESSAGES.PROFILE_EDIT_SUCCESS);
 }
+
+export const showGroupRenameSuccess = () => {
+    showSuccess(ERROR_MESSAGES.GROUP_RENAME_SUCCESS);
+}
