@@ -6,10 +6,12 @@ import {ROUTES} from "../constants/routes.js";
 import {useState, useEffect} from "react";
 import {ERROR_MESSAGES} from "../constants/errorMessages.js";
 import {axiosGroupPut} from "../api/requests/groupPutRequest.js";
+import {axiosGroupPost} from "../api/requests/groupPostRequest.js";
 
 const GroupsPage = () => {
     document.title = ROUTES.RUS_GROUPS;
-    const [form] = Form.useForm();
+    const [editForm] = Form.useForm();
+    const [createForm] = Form.useForm();
     const [data, loading, authorized, error] = useGetApi([], API_URLS.GROUPS, true);
 
     let listData = data.length > 0 ? data.map(group => ({
@@ -17,37 +19,60 @@ const GroupsPage = () => {
         description: group.id,
     })) : [];
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
 
-    const showModal = (groupIndex) => {
+    const showEditModal = (groupIndex) => {
         setSelectedGroupIndex(groupIndex);
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
     };
-    const handleFinish = (values) => {
+    const showCreateModal = () => {
+        setIsCreateModalOpen(true);
+    };
+
+    const handleEditFinish = (values) => {
         axiosGroupPut(data[selectedGroupIndex].id, values.title);
         data[selectedGroupIndex].name = values.title;
-        setIsModalOpen(false);
+        setIsEditModalOpen(false);
     }
-    const handleOk = () => {
-        form.submit();
+    const handleCreateFinish = (values) => {
+        //axiosGroupPut(data[selectedGroupIndex].id, values.title);
+        //data[selectedGroupIndex].name = values.title;
+        axiosGroupPost(values.title);
+        setIsCreateModalOpen(false);
+    }
+
+    const handleEditOk = () => {
+        editForm.submit();
     };
+    const handleCreateOk = () => {
+        createForm.submit();
+    };
+
     const handleCancel = () => {
-        setIsModalOpen(false);
+        setIsEditModalOpen(false);
+        setIsCreateModalOpen(false);
     };
 
     useEffect(() => {
         if (data.length > 0) {
-            form.setFieldsValue({
+            editForm.setFieldsValue({
                 title: data[selectedGroupIndex].name
             });
         }
-    }, [form, data, selectedGroupIndex]);
+    }, [editForm, data, selectedGroupIndex]);
 
     return (
         <>
-            <Modal title="Введите новое название группы" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Сохранить'>
-                <Form form={form} onFinish={handleFinish} >
+            <Modal
+                title="Введите новое название группы"
+                open={isEditModalOpen}
+                onOk={handleEditOk}
+                onCancel={handleCancel}
+                okText='Сохранить'
+            >
+                <Form form={editForm} onFinish={handleEditFinish} >
                     <Form.Item
                         name='title' rules={[
                         { required: true, message: ERROR_MESSAGES.ENTER_GROUP_NAME },]}
@@ -56,6 +81,25 @@ const GroupsPage = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
+            <Modal
+                title="Введите название новой группы"
+                open={isCreateModalOpen}
+                onOk={handleCreateOk}
+                onCancel={handleCancel}
+                okText='Создать'
+            >
+                <Form form={createForm} onFinish={handleCreateFinish} >
+                    <Form.Item
+                        name='title' rules={[
+                        { required: true, message: ERROR_MESSAGES.ENTER_GROUP_NAME },]}
+                    >
+                        <Input />
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+
 
             <List
                 loading={loading}
@@ -69,13 +113,13 @@ const GroupsPage = () => {
                             title={<a href={`/groups/${item.description}`}>{item.title}</a>}
                         />
                         <Row>
-                            <Button type="primary" onClick={() => showModal(index)} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /></Button>
+                            <Button type="primary" onClick={() => showEditModal(index)} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /></Button>
                             <Button type="primary" danger><DeleteOutlined /></Button>
                         </Row>
                     </List.Item>
                 )}
             />
-            <Button type='primary'><PlusCircleOutlined /> СОЗДАТЬ ГРУППУ</Button>
+            <Button type='primary' onClick={showCreateModal}><PlusCircleOutlined /> СОЗДАТЬ ГРУППУ</Button>
         </>
 
     );

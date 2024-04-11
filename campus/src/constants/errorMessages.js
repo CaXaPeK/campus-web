@@ -23,5 +23,6 @@ export const ERROR_MESSAGES = {
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
 
     PROFILE_EDIT_SUCCESS: 'Профиль изменён.',
-    GROUP_RENAME_SUCCESS: 'Группа переименована.'
+    GROUP_RENAME_SUCCESS: 'Группа переименована.',
+    GROUP_CREATE_SUCCESS: 'Группа создана.'
 }

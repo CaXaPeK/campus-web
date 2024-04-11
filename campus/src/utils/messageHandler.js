@@ -42,3 +42,7 @@ export const showProfileEditSuccess = () => {
 export const showGroupRenameSuccess = () => {
     showSuccess(ERROR_MESSAGES.GROUP_RENAME_SUCCESS);
 }
+
+export const showGroupCreateSuccess = () => {
+    showSuccess(ERROR_MESSAGES.GROUP_CREATE_SUCCESS);
+}
