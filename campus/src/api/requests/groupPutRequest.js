@@ -8,8 +8,9 @@ import {
 
 export const axiosGroupPut = async (id, newName) => {
     try {
-        await api.put(API_URLS.GROUPS + '/' + id, { name: newName });
+        const response = await api.put(API_URLS.GROUPS + '/' + id, { name: newName });
         showGroupRenameSuccess();
+        return response;
     }
     catch (error) {
         if (error.response.status == 401) {
@@ -18,5 +19,6 @@ export const axiosGroupPut = async (id, newName) => {
         else {
             showError(error.response.data.title);
         }
+        throw error;
     }
 }

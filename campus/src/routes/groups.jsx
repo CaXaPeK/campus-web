@@ -1,18 +1,24 @@
 import {Button, Form, Input, List, Modal, Row} from "antd";
 import {DeleteOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
-import {useGetApi} from "../api/hook/useGetApi.js";
 import {API_URLS} from "../constants/apiUrls.js";
 import {ROUTES} from "../constants/routes.js";
 import {useState, useEffect} from "react";
 import {ERROR_MESSAGES} from "../constants/errorMessages.js";
 import {axiosGroupPut} from "../api/requests/groupPutRequest.js";
 import {axiosGroupPost} from "../api/requests/groupPostRequest.js";
+import {axiosGroupDelete} from "../api/requests/groupDeleteRequest.js";
+import {fetchGetApi} from "../api/fetchGetApi.js";
 
 const GroupsPage = () => {
     document.title = ROUTES.RUS_GROUPS;
     const [editForm] = Form.useForm();
     const [createForm] = Form.useForm();
-    const [data, loading, authorized, error] = useGetApi([], API_URLS.GROUPS, true);
+
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [authorized, setAuthorized] = useState(false);
+    const [error, setError] = useState(null);
+    const [updates, setUpdates] = useState(false);
 
     let listData = data.length > 0 ? data.map(group => ({
         title: group.name,
@@ -23,24 +29,39 @@ const GroupsPage = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
 
+    const [modal, contextHolder] = Modal.useModal();
+    const config = {
+        title: 'Подождите!',
+        content: (
+            <>
+                Вы точно хотите удалить эту группу?
+            </>
+        )
+    }
+
     const showEditModal = (groupIndex) => {
         setSelectedGroupIndex(groupIndex);
         setIsEditModalOpen(true);
     };
     const showCreateModal = () => {
+        createForm.setFieldValue('title', '');
         setIsCreateModalOpen(true);
     };
 
     const handleEditFinish = (values) => {
-        axiosGroupPut(data[selectedGroupIndex].id, values.title);
-        data[selectedGroupIndex].name = values.title;
+        if (axiosGroupPut(data[selectedGroupIndex].id, values.title)) {
+            data[selectedGroupIndex].name = values.title;
+        }
         setIsEditModalOpen(false);
     }
-    const handleCreateFinish = (values) => {
-        //axiosGroupPut(data[selectedGroupIndex].id, values.title);
-        //data[selectedGroupIndex].name = values.title;
-        axiosGroupPost(values.title);
-        setIsCreateModalOpen(false);
+    const handleCreateFinish = async (values) => {
+        try {
+            await axiosGroupPost(values.title);
+            setUpdates(!updates);
+            setIsCreateModalOpen(false);
+        } catch (error) {
+
+        }
     }
 
     const handleEditOk = () => {
@@ -55,6 +76,18 @@ const GroupsPage = () => {
         setIsCreateModalOpen(false);
     };
 
+    const deleteGroup = async (groupIndex) => {
+        const confirmed = await modal.confirm(config);
+        if (confirmed) {
+            try {
+                await axiosGroupDelete(data[groupIndex].id);
+                setUpdates(!updates);
+            } catch (error) {
+
+            }
+        }
+    }
+
     useEffect(() => {
         if (data.length > 0) {
             editForm.setFieldsValue({
@@ -62,6 +95,10 @@ const GroupsPage = () => {
             });
         }
     }, [editForm, data, selectedGroupIndex]);
+
+    useEffect(() => {
+        fetchGetApi(API_URLS.GROUPS, setData, setLoading, setAuthorized, setError, [], true);
+    }, [updates])
 
     return (
         <>
@@ -99,8 +136,6 @@ const GroupsPage = () => {
                 </Form>
             </Modal>
 
-
-
             <List
                 loading={loading}
                 header={<h1 style={{alignContent: 'center'}}>Группы кампусных курсов</h1>}
@@ -114,12 +149,13 @@ const GroupsPage = () => {
                         />
                         <Row>
                             <Button type="primary" onClick={() => showEditModal(index)} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /></Button>
-                            <Button type="primary" danger><DeleteOutlined /></Button>
+                            <Button type="primary" onClick={async () => deleteGroup(index)} danger><DeleteOutlined /></Button>
                         </Row>
                     </List.Item>
                 )}
             />
             <Button type='primary' onClick={showCreateModal}><PlusCircleOutlined /> СОЗДАТЬ ГРУППУ</Button>
+            {contextHolder}
         </>
 
     );

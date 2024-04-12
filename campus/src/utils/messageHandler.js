@@ -31,6 +31,10 @@ export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }
 
+export const showGroupNotFound = () => {
+    showError(ERROR_MESSAGES.GROUP_NOT_FOUND);
+}
+
 export const showAlreadyLoggedOut = () => {
     showError(ERROR_MESSAGES.ALREADY_LOGGED_OUT);
 }
@@ -45,4 +49,8 @@ export const showGroupRenameSuccess = () => {
 
 export const showGroupCreateSuccess = () => {
     showSuccess(ERROR_MESSAGES.GROUP_CREATE_SUCCESS);
+}
+
+export const showGroupDeleteSuccess = () => {
+    showSuccess(ERROR_MESSAGES.GROUP_DELETE_SUCCESS);
 }

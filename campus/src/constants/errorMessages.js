@@ -24,5 +24,8 @@ export const ERROR_MESSAGES = {
 
     PROFILE_EDIT_SUCCESS: 'Профиль изменён.',
     GROUP_RENAME_SUCCESS: 'Группа переименована.',
-    GROUP_CREATE_SUCCESS: 'Группа создана.'
+    GROUP_CREATE_SUCCESS: 'Группа создана.',
+    GROUP_DELETE_SUCCESS: 'Группа удалена.',
+
+    GROUP_NOT_FOUND: 'Группа не найдена.'
 }
