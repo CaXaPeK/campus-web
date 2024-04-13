@@ -1,26 +1,25 @@
 import {api} from "../axiosInstance.js";
 import {API_URLS} from "../../constants/apiUrls.js";
 import {
-    showCourseCreateSuccess,
+    showCourseEditSuccess,
     showError,
     showUnauthorizedError
 } from "../../utils/messageHandler.js";
 
-export const axiosCoursePost = async (groupId, name, startYear, maximumStudentsCount, semester, requirements, annotations, mainTeacherId) => {
+export const axiosCourseEdit = async (courseId, name, startYear, maximumStudentsCount, semester, requirements, annotations) => {
     const data = {
         name: name,
         startYear: startYear,
         maximumStudentsCount: maximumStudentsCount,
         semester: semester,
         requirements: requirements,
-        annotations: annotations,
-        mainTeacherId: mainTeacherId
+        annotations: annotations
     }
 
     try {
-        console.log(data)
-        const response = await api.post(API_URLS.GROUPS + '/' + groupId, data);
-        showCourseCreateSuccess();
+        const response = await api.put(API_URLS.COURSE + courseId, data);
+        console.log(response);
+        showCourseEditSuccess();
         return response;
     }
     catch (error) {

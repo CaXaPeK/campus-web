@@ -25,6 +25,7 @@ export const ERROR_MESSAGES = {
     PASSWORD_SHORT: 'Пароль должен состоять как минимум из 6 символов.',
     PASSWORD_NO_NUMBERS: 'Пароль должен содержать как минимум 1 цифру.',
     PASSWORDS_DONT_MATCH: 'Введенные пароли не совпадают.',
+    CAPACITY_CANNOT_BE_LESS: 'Количество мест не может быть меньше количества зачисленных студентов.',
 
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
@@ -34,6 +35,7 @@ export const ERROR_MESSAGES = {
     GROUP_CREATE_SUCCESS: 'Группа создана.',
     GROUP_DELETE_SUCCESS: 'Группа удалена.',
     COURSE_CREATE_SUCCESS: 'Курс создан.',
+    COURSE_EDIT_SUCCESS: 'Курс изменён.',
 
     GROUP_NOT_FOUND: 'Группа не найдена.'
 }

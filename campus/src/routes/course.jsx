@@ -1,5 +1,19 @@
-import {Badge, Button, Card, Divider, Flex, Layout, List, Row, Tabs, Tag} from "antd";
-import {EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
+import {
+    Badge,
+    Button,
+    Card,
+    DatePicker,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    List,
+    Modal, Radio,
+    Tabs,
+    Tag
+} from "antd";
+import {DeleteOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {fetchGetApi} from "../api/fetchGetApi.js";
 import {API_URLS} from "../constants/apiUrls.js";
@@ -10,6 +24,11 @@ import {
     studentStatusColors,
     studentStatusNames
 } from "../constants/statusMetadata.js";
+import {ERROR_MESSAGES} from "../constants/errorMessages.js";
+import dayjs from "dayjs";
+import ReactQuill from "react-quill";
+import {DebounceSelect, fetchUserList} from "../components/courses/selectWithUserList.jsx";
+import {axiosCourseEdit} from "../api/requests/courseEditRequest.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -19,6 +38,13 @@ const CoursePage = () => {
     const [authorized, setAuthorized] = useState(false);
     const [error, setError] = useState(null);
     const [updates, setUpdates] = useState(false);
+
+    const [requirements, setRequirements] = useState('');
+    const [annotations, setAnnotations] = useState('');
+    const [selectedTeacher, setSelectedTeacher] = useState('');
+
+    const [isEditCourseModalOpen, setIsEditCourseModalOpen] = useState(false);
+    const [editCourseForm] = Form.useForm();
 
     let notificationListData = data.notifications != null ? data.notifications.map(notification => ({
         data: notification
@@ -31,6 +57,51 @@ const CoursePage = () => {
     let studentListData = data.students != null ? data.students.map(student => ({
         data: student
     })) : [];
+
+    const showEditCourseModal = () => {
+        setIsEditCourseModalOpen(true);
+    };
+
+    const handleEditCourseFinish = async (values) => {
+        try {
+            await axiosCourseEdit(
+                courseId,
+                values.name,
+                dayjs(values.startYear).year(),
+                values.maximumStudentsCount,
+                values.semester,
+                values.requirements,
+                values.annotations
+            );
+            setUpdates(!updates);
+            setIsEditCourseModalOpen(false);
+        } catch (error) {
+
+        }
+        setIsEditCourseModalOpen(false);
+    }
+
+    const handleEditCourseOk = () => {
+        editCourseForm.submit();
+    };
+
+    const handleCancel = () => {
+        setIsEditCourseModalOpen(false);
+    };
+
+    useEffect(() => {
+        if (data.length != []) {
+            console.log(data)
+            editCourseForm.setFieldsValue({
+                name: data.name,
+                startYear: dayjs().set('year', data.startYear),
+                maximumStudentsCount: data.maximumStudentsCount,
+                semester: data.semester,
+                requirements: data.requirements,
+                annotations: data.annotations
+            });
+        }
+    }, [editCourseForm, data, updates]);
 
     const infoTabsItems = [
         {
@@ -126,63 +197,154 @@ const CoursePage = () => {
     }, [updates])
 
     return (
-        <Card
-            style={{width: '60%', minWidth: '450px', marginBottom: '16px'}}
-        >
-            <h1>{data.name}</h1>
-            <Divider />
-            <Flex justify='space-between'>
-                <h2>Основные данные курса</h2>
-                <Button type="primary" style={{background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ ДАННЫЕ</Button>
-            </Flex>
-            <Card bordered={true}>
+        <>
+            <Card
+                style={{width: '60%', minWidth: '450px', marginBottom: '16px'}}
+            >
+                <h1>{data.name}</h1>
+                <Divider />
                 <Flex justify='space-between'>
+                    <h2>Основные данные курса</h2>
                     <div>
-                        <b>Статус курса</b>
-                        <div style={{ color: courseStatusColors[data.status] }}>{courseStatusNames[data.status]}</div>
+                        <Button type="primary" onClick={showEditCourseModal} style={{background: 'orange', marginRight: 8, marginBottom: 8}}><EditOutlined /> ИЗМЕНИТЬ ДАННЫЕ</Button>
+                        <Button type="primary" danger><DeleteOutlined /> УДАЛИТЬ КУРС</Button>
                     </div>
-                    <Button type="primary" style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ СТАТУС</Button>
-                </Flex>
 
-                <Divider/>
-                <Flex justify='space-between'>
-                    <div style={{width: '50%'}}>
-                        <b>Учебный год</b>
-                        <div>{data.startYear + '-' + (data.startYear+1)}</div>
-                    </div>
-                    <div style={{width: '50%'}}>
-                        <b>Семестр</b>
-                        <div>{data.semester == 'Spring' ? 'Весенний' : 'Осенний'}</div>
-                    </div>
                 </Flex>
-                <Divider/>
-                <Flex justify='space-between'>
-                    <div style={{width: '50%'}}>
-                        <b>Всего мест</b>
-                        <div>{data.maximumStudentsCount}</div>
-                    </div>
-                    <div style={{width: '50%'}}>
-                        <b>Студентов зачислено</b>
-                        <div>{data.studentsEnrolledCount}</div>
-                    </div>
-                </Flex>
-                <Divider/>
-                <b>Заявок на рассмотрении</b>
-                <div>{data.studentsInQueueCount}</div>
-            </Card>
+                <Card bordered={true}>
+                    <Flex justify='space-between'>
+                        <div>
+                            <b>Статус курса</b>
+                            <div style={{ color: courseStatusColors[data.status] }}>{courseStatusNames[data.status]}</div>
+                        </div>
+                        <Button type="primary" style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ СТАТУС</Button>
+                    </Flex>
+
+                    <Divider/>
+                    <Flex justify='space-between'>
+                        <div style={{width: '50%'}}>
+                            <b>Учебный год</b>
+                            <div>{data.startYear + '-' + (data.startYear+1)}</div>
+                        </div>
+                        <div style={{width: '50%'}}>
+                            <b>Семестр</b>
+                            <div>{data.semester == 'Spring' ? 'Весенний' : 'Осенний'}</div>
+                        </div>
+                    </Flex>
+                    <Divider/>
+                    <Flex justify='space-between'>
+                        <div style={{width: '50%'}}>
+                            <b>Всего мест</b>
+                            <div>{data.maximumStudentsCount}</div>
+                        </div>
+                        <div style={{width: '50%'}}>
+                            <b>Студентов зачислено</b>
+                            <div>{data.studentsEnrolledCount}</div>
+                        </div>
+                    </Flex>
+                    <Divider/>
+                    <b>Заявок на рассмотрении</b>
+                    <div>{data.studentsInQueueCount}</div>
+                </Card>
+                    <Tabs
+                        defaultActiveKey="1"
+                        centered
+                        style={{marginTop: '16px'}}
+                        items={infoTabsItems}
+                    />
                 <Tabs
                     defaultActiveKey="1"
                     centered
                     style={{marginTop: '16px'}}
-                    items={infoTabsItems}
+                    items={userTabsItems}
                 />
-            <Tabs
-                defaultActiveKey="1"
-                centered
-                style={{marginTop: '16px'}}
-                items={userTabsItems}
-            />
-        </Card>
+            </Card>
+
+            <Modal
+                title='Изменение данных курса'
+                open={isEditCourseModalOpen}
+                onOk={handleEditCourseOk}
+                onCancel={handleCancel}
+                okText='Сохранить'
+            >
+                <Form
+                    form={editCourseForm}
+                    onFinish={handleEditCourseFinish}
+                    layout='vertical'
+                >
+                    <Form.Item
+                        name='name'
+                        label='Название курса'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.ENTER_COURSE_NAME },]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='startYear'
+                        label='Год начала курса'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.SELECT_START_YEAR },]}
+                    >
+                        <DatePicker
+                            picker='year'
+                            style={{ width: '100%' }}
+                            minDate={dayjs('2000-01-01', 'YYYY-MM-DD')}
+                            maxDate={dayjs('2029-12-31', 'YYYY-MM-DD')}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='maximumStudentsCount'
+                        label='Общее количество мест'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.ENTER_COURSE_CAPACITY },
+                            () => ({
+                                validator(_, value) {
+                                    if (!value || value >= data.studentsEnrolledCount) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error(ERROR_MESSAGES.CAPACITY_CANNOT_BE_LESS));
+                                },
+                            }),
+                        ]}
+                    >
+                        <InputNumber min={1} max={200} style={{ width: '100%' }} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='semester'
+                        label='Семестр'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.SELECT_SEMESTER },]}
+                    >
+                        <Radio.Group>
+                            <Radio value="Autumn"> Осенний </Radio>
+                            <Radio value="Spring"> Весенний </Radio>
+                        </Radio.Group>
+                    </Form.Item>
+
+                    <Form.Item
+                        name='requirements'
+                        label='Требования'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.ENTER_REQUIREMENTS },]}
+                    >
+                        <ReactQuill theme="snow" value={requirements} onChange={setRequirements} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='annotations'
+                        label='Аннотации'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.ENTER_ANNOTATIONS },]}
+                    >
+                        <ReactQuill theme="snow" value={annotations} onChange={setAnnotations} />
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </>
     );
 }
 

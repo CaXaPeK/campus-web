@@ -15,7 +15,7 @@ export const courseStatusNames = {
 export const studentStatusColors = {
     InQueue: 'blue',
     Accepted: 'green',
-    Declined: 'blue',
+    Declined: 'red',
 }
 
 export const studentStatusNames = {

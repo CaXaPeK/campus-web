@@ -162,8 +162,8 @@ const GroupPage = ({mode}) => {
                             { required: true, message: ERROR_MESSAGES.SELECT_SEMESTER },]}
                     >
                         <Radio.Group>
-                            <Radio value="autumn"> Осенний </Radio>
-                            <Radio value="spring"> Весенний </Radio>
+                            <Radio value="Autumn"> Осенний </Radio>
+                            <Radio value="Spring"> Весенний </Radio>
                         </Radio.Group>
                     </Form.Item>
 
@@ -189,7 +189,7 @@ const GroupPage = ({mode}) => {
                         name='mainTeacherId'
                         label='Основной преподаватель курса'
                         rules={[
-                            { required: true, message: ERROR_MESSAGES.SELECT_SEMESTER },]}
+                            { required: true, message: ERROR_MESSAGES.SELECT_MAIN_TEACHER },]}
                     >
                         <DebounceSelect
                             value={selectedTeacher}
@@ -204,7 +204,6 @@ const GroupPage = ({mode}) => {
                     </Form.Item>
                 </Form>
             </Modal>
-
         </>
     );
 }

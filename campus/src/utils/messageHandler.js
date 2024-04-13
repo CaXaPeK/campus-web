@@ -54,3 +54,11 @@ export const showGroupCreateSuccess = () => {
 export const showGroupDeleteSuccess = () => {
     showSuccess(ERROR_MESSAGES.GROUP_DELETE_SUCCESS);
 }
+
+export const showCourseCreateSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_CREATE_SUCCESS);
+}
+
+export const showCourseEditSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_EDIT_SUCCESS);
+}
