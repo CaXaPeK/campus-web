@@ -1,11 +1,12 @@
 import { Menu, Avatar } from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { ROUTES } from "../../constants/routes";
-import { Link } from "react-router-dom";
 import { axiosLogout } from "../../api/requests/logoutRequest";
+import {useSelector} from "react-redux";
 
 const RightMenu = ({ mode }) => {
   const token = localStorage.getItem('token');
+  const user = useSelector((state) => state.user);
 
   return (
     <Menu mode={mode} disabledOverflow>
@@ -39,7 +40,6 @@ const RightMenu = ({ mode }) => {
             <a href={ROUTES.LOGIN}>Вход</a>
           </Menu.Item>
         </>
-        
       )}
     </Menu>
   );

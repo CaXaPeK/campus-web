@@ -8,11 +8,13 @@ import {axiosGroupPut} from "../api/requests/groupPutRequest.js";
 import {axiosGroupPost} from "../api/requests/groupPostRequest.js";
 import {axiosGroupDelete} from "../api/requests/groupDeleteRequest.js";
 import {fetchGetApi} from "../api/fetchGetApi.js";
+import {useSelector} from "react-redux";
 
 const GroupsPage = () => {
     document.title = ROUTES.RUS_GROUPS;
     const [editForm] = Form.useForm();
     const [createForm] = Form.useForm();
+    const user = useSelector((state) => state.user);
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -147,14 +149,19 @@ const GroupsPage = () => {
                         <List.Item.Meta
                             title={<a href={`/groups/${item.description}`}>{item.title}</a>}
                         />
-                        <Row>
-                            <Button type="primary" onClick={() => showEditModal(index)} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /></Button>
-                            <Button type="primary" onClick={async () => deleteGroup(index)} danger><DeleteOutlined /></Button>
-                        </Row>
+                        {user.isAdmin ? (
+                            <Row>
+                                <Button type="primary" onClick={() => showEditModal(index)} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /></Button>
+                                <Button type="primary" onClick={async () => deleteGroup(index)} danger><DeleteOutlined /></Button>
+                            </Row>
+                        ) : null}
+
                     </List.Item>
                 )}
             />
-            <Button type='primary' onClick={showCreateModal}><PlusCircleOutlined /> СОЗДАТЬ ГРУППУ</Button>
+            {user.isAdmin ? (
+                <Button type='primary' onClick={showCreateModal}><PlusCircleOutlined /> СОЗДАТЬ ГРУППУ</Button>
+            ) : null}
             {contextHolder}
         </>
 

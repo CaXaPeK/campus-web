@@ -11,7 +11,9 @@ import './App.css';
 import ProfilePage from './routes/profile';
 import GroupsPage from "./routes/groups.jsx";
 import {ConfigProvider} from "antd";
+import { Provider } from 'react-redux';
 import ruRU from 'antd/locale/ru_RU.js'
+import {store} from "./redux/store.js";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +42,6 @@ const router = createBrowserRouter([
       }
     ],
   },
-  
 ]);
 
 const queryClient = new QueryClient({
@@ -52,9 +53,11 @@ const queryClient = new QueryClient({
 });
 
 export const App = () => (
-  <ConfigProvider locale={ruRU}>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </ConfigProvider>
+  <Provider store={store}>
+    <ConfigProvider locale={ruRU}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ConfigProvider>
+  </Provider>
 );
