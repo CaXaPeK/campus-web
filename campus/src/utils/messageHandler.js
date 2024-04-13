@@ -31,8 +31,16 @@ export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }
 
+export const showElementNotFound = () => {
+    showError(ERROR_MESSAGES.ELEMENT_NOT_FOUND);
+}
+
 export const showGroupNotFound = () => {
     showError(ERROR_MESSAGES.GROUP_NOT_FOUND);
+}
+
+export const showCourseNotFound = () => {
+    showError(ERROR_MESSAGES.COURSE_NOT_FOUND);
 }
 
 export const showAlreadyLoggedOut = () => {
@@ -61,4 +69,8 @@ export const showCourseCreateSuccess = () => {
 
 export const showCourseEditSuccess = () => {
     showSuccess(ERROR_MESSAGES.COURSE_EDIT_SUCCESS);
+}
+
+export const showCourseDeleteSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_DELETE_SUCCESS);
 }

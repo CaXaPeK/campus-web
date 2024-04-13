@@ -36,6 +36,9 @@ export const ERROR_MESSAGES = {
     GROUP_DELETE_SUCCESS: 'Группа удалена.',
     COURSE_CREATE_SUCCESS: 'Курс создан.',
     COURSE_EDIT_SUCCESS: 'Курс изменён.',
+    COURSE_DELETE_SUCCESS: 'Курс удалён.',
 
-    GROUP_NOT_FOUND: 'Группа не найдена.'
+    ELEMENT_NOT_FOUND: 'Элемент не найден.',
+    GROUP_NOT_FOUND: 'Группа не найдена.',
+    COURSE_NOT_FOUND: 'Курс не найден.',
 }

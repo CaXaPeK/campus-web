@@ -1,5 +1,5 @@
 import {api} from "./axiosInstance.js";
-import {showUnauthorizedError} from "../utils/messageHandler.js";
+import {showElementNotFound, showUnauthorizedError} from "../utils/messageHandler.js";
 
 export const fetchGetApi = async (url, setData, setLoading, setAuthorized, setError, stub, notifyAuthorized) => {
     setLoading(true);
@@ -18,6 +18,10 @@ export const fetchGetApi = async (url, setData, setLoading, setAuthorized, setEr
 
         if (error.response.status == 401 && notifyAuthorized) {
             showUnauthorizedError();
+        }
+
+        if (error.response.status == 404) {
+            showElementNotFound();
         }
 
         throw error;

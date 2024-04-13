@@ -29,6 +29,9 @@ import dayjs from "dayjs";
 import ReactQuill from "react-quill";
 import {DebounceSelect, fetchUserList} from "../components/courses/selectWithUserList.jsx";
 import {axiosCourseEdit} from "../api/requests/courseEditRequest.js";
+import {axiosGroupDelete} from "../api/requests/groupDeleteRequest.js";
+import {axiosCourseDelete} from "../api/requests/courseDeleteRequest.js";
+import {ROUTES} from "../constants/routes.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -89,6 +92,28 @@ const CoursePage = () => {
         setIsEditCourseModalOpen(false);
     };
 
+    const deleteCourse = async () => {
+        const confirmed = await modal.confirm(config);
+        if (confirmed) {
+            try {
+                await axiosCourseDelete(courseId);
+                window.location.href = ROUTES.GROUPS;
+            } catch (error) {
+
+            }
+        }
+    }
+
+    const [modal, contextHolder] = Modal.useModal();
+    const config = {
+        title: 'Подождите!',
+        content: (
+            <>
+                Вы точно хотите удалить этот курс?
+            </>
+        )
+    }
+
     useEffect(() => {
         if (data.length != []) {
             console.log(data)
@@ -119,7 +144,7 @@ const CoursePage = () => {
             label: (
                 <>
                     Уведомления
-                    <Badge style={{marginLeft: 8}} count={data.notifications != null ? data.notifications.length : 0} />
+                    <Badge overflowCount={9} style={{marginLeft: 8}} count={data.notifications != null ? data.notifications.length : 0} />
                 </>
             ),
             children: <>
@@ -207,7 +232,7 @@ const CoursePage = () => {
                     <h2>Основные данные курса</h2>
                     <div>
                         <Button type="primary" onClick={showEditCourseModal} style={{background: 'orange', marginRight: 8, marginBottom: 8}}><EditOutlined /> ИЗМЕНИТЬ ДАННЫЕ</Button>
-                        <Button type="primary" danger><DeleteOutlined /> УДАЛИТЬ КУРС</Button>
+                        <Button type="primary" onClick={deleteCourse} danger><DeleteOutlined /> УДАЛИТЬ КУРС</Button>
                     </div>
 
                 </Flex>
@@ -344,6 +369,7 @@ const CoursePage = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+            {contextHolder}
         </>
     );
 }

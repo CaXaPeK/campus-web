@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { api } from "../axiosInstance";
-import { showUnauthorizedError } from "../../utils/messageHandler";
+import {showElementNotFound, showUnauthorizedError} from "../../utils/messageHandler";
 
 export const useGetApi = (stub, url, notifyAuthorized) => {
     const [data, setData] = useState(stub);
@@ -25,6 +25,10 @@ export const useGetApi = (stub, url, notifyAuthorized) => {
 
                 if (error.response.status == 401 && notifyAuthorized) {
                     showUnauthorizedError();
+                }
+
+                if (error.response.status == 404) {
+                    showElementNotFound();
                 }
             }
         };
