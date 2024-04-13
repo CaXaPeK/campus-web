@@ -28,7 +28,7 @@ export const axiosRegistration = async (fullName, birthDate, email, password, co
             showEmailTaken();
         }
         else {
-            errorMessage = error.response.data.title;
+            errorMessage = error.response.data.message;
             showError(errorMessage);
         }
     }

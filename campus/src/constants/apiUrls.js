@@ -10,5 +10,6 @@ export const API_URLS = {
     MY_COURSES: 'courses/my',
     TEACHING_COURSES: '/courses/teaching',
     COURSE: 'courses/',
-    COURSE_DETAILS: '/details'
+    COURSE_DETAILS: '/details',
+    COURSE_STATUS: '/status'
 }

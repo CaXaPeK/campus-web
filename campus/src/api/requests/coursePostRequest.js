@@ -28,7 +28,7 @@ export const axiosCoursePost = async (groupId, name, startYear, maximumStudentsC
             showUnauthorizedError();
         }
         else {
-            showError(error.response.data.title)
+            showError(error.response.data.message)
         }
         console.log(error)
         throw error;

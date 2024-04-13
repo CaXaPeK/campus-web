@@ -9,7 +9,7 @@ export const courseStatusNames = {
     OpenForAssigning: 'Открыт для записи',
     Finished: 'Закрыт',
     Created: 'Создан',
-    Started: 'В процессе обучения'
+    Started: 'В процессе'
 }
 
 export const studentStatusColors = {

@@ -21,7 +21,7 @@ export const axiosLogin = async (email, password) => {
             showLoginFailed();
         }
         else {
-            errorMessage = error.response.data.title;
+            errorMessage = error.response.data.message;
             showError(errorMessage);
         }
     }

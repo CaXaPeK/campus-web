@@ -28,6 +28,6 @@ export const axiosLogout = async () => {
             window.location.href = ROUTES.ROOT;
         }
 
-        showError(error.response.data.title);
+        showError(error.response.data.message);
     }
 }

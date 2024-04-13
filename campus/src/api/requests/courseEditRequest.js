@@ -18,7 +18,6 @@ export const axiosCourseEdit = async (courseId, name, startYear, maximumStudents
 
     try {
         const response = await api.put(API_URLS.COURSE + courseId, data);
-        console.log(response);
         showCourseEditSuccess();
         return response;
     }
@@ -27,9 +26,8 @@ export const axiosCourseEdit = async (courseId, name, startYear, maximumStudents
             showUnauthorizedError();
         }
         else {
-            showError(error.response.data.title)
+            showError(error.response.data.message)
         }
-        console.log(error)
         throw error;
     }
 }

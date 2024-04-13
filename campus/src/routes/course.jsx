@@ -32,6 +32,7 @@ import {axiosCourseEdit} from "../api/requests/courseEditRequest.js";
 import {axiosGroupDelete} from "../api/requests/groupDeleteRequest.js";
 import {axiosCourseDelete} from "../api/requests/courseDeleteRequest.js";
 import {ROUTES} from "../constants/routes.js";
+import {axiosCourseStatusEdit} from "../api/requests/courseStatusEditRequest.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -44,10 +45,11 @@ const CoursePage = () => {
 
     const [requirements, setRequirements] = useState('');
     const [annotations, setAnnotations] = useState('');
-    const [selectedTeacher, setSelectedTeacher] = useState('');
 
     const [isEditCourseModalOpen, setIsEditCourseModalOpen] = useState(false);
+    const [isEditCourseStatusModalOpen, setIsEditCourseStatusModalOpen] = useState(false);
     const [editCourseForm] = Form.useForm();
+    const [editCourseStatusForm] = Form.useForm();
 
     let notificationListData = data.notifications != null ? data.notifications.map(notification => ({
         data: notification
@@ -63,6 +65,10 @@ const CoursePage = () => {
 
     const showEditCourseModal = () => {
         setIsEditCourseModalOpen(true);
+    };
+
+    const showEditCourseStatusModal = () => {
+        setIsEditCourseStatusModalOpen(true);
     };
 
     const handleEditCourseFinish = async (values) => {
@@ -84,12 +90,28 @@ const CoursePage = () => {
         setIsEditCourseModalOpen(false);
     }
 
+    const handleEditCourseStatusFinish = async (values) => {
+        try {
+            await axiosCourseStatusEdit(courseId, values.status);
+            setUpdates(!updates);
+            setIsEditCourseStatusModalOpen(false);
+        } catch (error) {
+
+        }
+        setIsEditCourseStatusModalOpen(false);
+    }
+
     const handleEditCourseOk = () => {
         editCourseForm.submit();
     };
 
+    const handleEditCourseStatusOk = () => {
+        editCourseStatusForm.submit();
+    };
+
     const handleCancel = () => {
         setIsEditCourseModalOpen(false);
+        setIsEditCourseStatusModalOpen(false);
     };
 
     const deleteCourse = async () => {
@@ -242,7 +264,7 @@ const CoursePage = () => {
                             <b>Статус курса</b>
                             <div style={{ color: courseStatusColors[data.status] }}>{courseStatusNames[data.status]}</div>
                         </div>
-                        <Button type="primary" style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ СТАТУС</Button>
+                        {data.status != 'Finished' ? <Button type="primary" onClick={showEditCourseStatusModal} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ СТАТУС</Button> : null}
                     </Flex>
 
                     <Divider/>
@@ -366,6 +388,32 @@ const CoursePage = () => {
                             { required: true, message: ERROR_MESSAGES.ENTER_ANNOTATIONS },]}
                     >
                         <ReactQuill theme="snow" value={annotations} onChange={setAnnotations} />
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal
+                title='Изменение статуса курса'
+                open={isEditCourseStatusModalOpen}
+                onOk={handleEditCourseStatusOk}
+                onCancel={handleCancel}
+                okText='Сохранить'
+            >
+                <Form
+                    form={editCourseStatusForm}
+                    onFinish={handleEditCourseStatusFinish}
+                    layout='vertical'
+                >
+                    <Form.Item
+                        name='status'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.SELECT_COURSE_STATUS },]}
+                    >
+                        <Radio.Group>
+                            <Radio value="OpenForAssigning"> Открыт для записи </Radio>
+                            <Radio value="Started"> В процессе </Radio>
+                            <Radio value="Finished"> Закрыт </Radio>
+                        </Radio.Group>
                     </Form.Item>
                 </Form>
             </Modal>

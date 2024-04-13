@@ -17,7 +17,7 @@ export const axiosGroupPut = async (id, newName) => {
             showUnauthorizedError();
         }
         else {
-            showError(error.response.data.title);
+            showError(error.response.data.message);
         }
         throw error;
     }

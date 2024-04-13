@@ -18,6 +18,7 @@ export const ERROR_MESSAGES = {
     ENTER_REQUIREMENTS: 'Введите требования.',
     ENTER_ANNOTATIONS: 'Введите аннотации.',
     SELECT_MAIN_TEACHER: 'Выберите основного преподавателя.',
+    SELECT_COURSE_STATUS: 'Выберите статус.',
 
     NOT_AN_EMAIL: 'Это не адрес электронной почты.',
     TOO_MANY_WORDS: 'Введите только одно слово.',
@@ -37,6 +38,7 @@ export const ERROR_MESSAGES = {
     COURSE_CREATE_SUCCESS: 'Курс создан.',
     COURSE_EDIT_SUCCESS: 'Курс изменён.',
     COURSE_DELETE_SUCCESS: 'Курс удалён.',
+    COURSE_STATUS_EDIT_SUCCESS: 'Статус курса изменён.',
 
     ELEMENT_NOT_FOUND: 'Элемент не найден.',
     GROUP_NOT_FOUND: 'Группа не найдена.',

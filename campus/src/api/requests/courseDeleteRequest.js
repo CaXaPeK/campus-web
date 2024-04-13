@@ -20,7 +20,7 @@ export const axiosCourseDelete = async (id) => {
             showCourseNotFound();
         }
         else {
-            showError(error.response.data.title)
+            showError(error.response.data.message)
         }
         throw error;
     }

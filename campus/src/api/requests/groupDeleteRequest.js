@@ -20,7 +20,7 @@ export const axiosGroupDelete = async (id) => {
             showGroupNotFound();
         }
         else {
-            showError(error.response.data.title)
+            showError(error.response.data.message)
         }
         throw error;
     }
