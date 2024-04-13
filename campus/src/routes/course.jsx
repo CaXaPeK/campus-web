@@ -1,4 +1,4 @@
-import {Badge, Button, Card, Divider, Flex, Layout, List, Row, Tabs} from "antd";
+import {Badge, Button, Card, Divider, Flex, Layout, List, Row, Tabs, Tag} from "antd";
 import {EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {fetchGetApi} from "../api/fetchGetApi.js";
@@ -20,7 +20,11 @@ const CoursePage = () => {
         data: notification
     })) : [];
 
-    const items = [
+    let teacherListData = data.teachers != null ? data.teachers.map(teacher => ({
+        data: teacher
+    })) : [];
+
+    const infoTabsItems = [
         {
             key: '1',
             label: 'Требования к курсу',
@@ -52,6 +56,33 @@ const CoursePage = () => {
                 />
             </>,
         },
+    ];
+
+    const userTabsItems = [
+        {
+            key: '1',
+            label: 'Преподаватели',
+            children : <>
+                <Button type='primary'><PlusCircleOutlined /> ДОБАВИТЬ ПРЕПОДАВАТЕЛЯ</Button>
+                <List
+                    style={{marginTop: 8}}
+                    dataSource={teacherListData}
+                    renderItem={(item, index) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={<>{item.data.name} {item.data.isMain ? (<Tag style={{marginLeft: 8}} color='green-inverse'>основной</Tag>) : null}</>}
+                                description={item.data.email}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </>
+        },
+        {
+            key: '2',
+            label: 'Студенты',
+            children: <></>
+        }
     ];
 
     useEffect(() => {
@@ -103,14 +134,19 @@ const CoursePage = () => {
                 <b>Заявок на рассмотрении</b>
                 <div>{data.studentsInQueueCount}</div>
             </Card>
-
                 <Tabs
                     defaultActiveKey="1"
                     centered
                     style={{marginTop: '16px'}}
-                    items={items}
+                    items={infoTabsItems}
                 />
-            </Card>
+            <Tabs
+                defaultActiveKey="1"
+                centered
+                style={{marginTop: '16px'}}
+                items={userTabsItems}
+            />
+        </Card>
     );
 }
 
