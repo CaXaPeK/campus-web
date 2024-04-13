@@ -14,6 +14,7 @@ import {ConfigProvider} from "antd";
 import { Provider } from 'react-redux';
 import ruRU from 'antd/locale/ru_RU.js'
 import {store} from "./redux/store.js";
+import GroupPage from "./routes/group.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.GROUPS,
         element: <GroupsPage />,
+      },
+      {
+        path: ROUTES.GROUP,
+        element: <GroupPage />,
       }
     ],
   },
