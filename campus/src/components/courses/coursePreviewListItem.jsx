@@ -19,7 +19,7 @@ const CoursePreviewListItem = ({ name, id, startYear, maximumStudentsCount, rema
     return (
         <List.Item>
             <List.Item.Meta
-                title={<a style={{fontSize: 20}} href={`/courses/${id}`}>{name}</a>}
+                title={<a style={{fontSize: 20, overflowWrap: 'break-word'}} href={`/courses/${id}`}>{name}</a>}
                 description={
                     <>
                         Учебный год: {startYear + '-' + (startYear+1)}<br/>

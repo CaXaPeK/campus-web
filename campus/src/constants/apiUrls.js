@@ -5,5 +5,8 @@ export const API_URLS = {
     PROFILE: 'profile',
     ROLES: 'roles',
     LOGOUT: 'logout',
-    GROUPS: 'groups'
+    GROUPS: 'groups',
+    USERS: 'users',
+    MY_COURSES: 'courses/my',
+    TEACHING_COURSES: '/courses/teaching',
 }

@@ -13,5 +13,7 @@ export const ROUTES = {
     RUS_REGISTRATION: 'Регистрация',
     RUS_PROFILE: 'Профиль',
     RUS_ROOT: 'Кампусные курсы',
-    RUS_GROUPS: 'Группы курсов'
+    RUS_GROUPS: 'Группы курсов',
+    RUS_MY_COURSES: 'Мои курсы',
+    RUS_TEACHING_COURSES: 'Преподаваемые курсы'
 };

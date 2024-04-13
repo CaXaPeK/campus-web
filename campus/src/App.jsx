@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 import ruRU from 'antd/locale/ru_RU.js'
 import {store} from "./redux/store.js";
 import GroupPage from "./routes/group.jsx";
+import CoursePage from "./routes/course.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,25 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.GROUP,
-        element: <GroupPage />,
+        element: <GroupPage
+          mode='public'
+        />,
+      },
+      {
+        path: ROUTES.MY_COURSES,
+        element: <GroupPage
+            mode='my'
+        />,
+      },
+      {
+        path: ROUTES.TEACHING_COURSES,
+        element: <GroupPage
+            mode='teaching'
+        />,
+      },
+      {
+        path: ROUTES.COURSE,
+        element: <CoursePage />,
       }
     ],
   },
