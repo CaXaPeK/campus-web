@@ -1,7 +1,4 @@
 export const ERROR_MESSAGES = {
-    LOGIN_FAILED: 'Вход не удался.',
-    EMAIL_TAKEN: 'Пользователь с такой электронной почтой уже существует.',
-
     ENTER_EMAIL: 'Введите электронную почту.',
     ENTER_PASSWORD: 'Введите пароль.',
     ENTER_CONFIRM_PASSWORD: 'Введите пароль ещё раз.',
@@ -19,7 +16,10 @@ export const ERROR_MESSAGES = {
     ENTER_ANNOTATIONS: 'Введите аннотации.',
     SELECT_MAIN_TEACHER: 'Выберите основного преподавателя.',
     SELECT_COURSE_STATUS: 'Выберите статус.',
+    ENTER_NOTIFICATION_TEXT: 'Введите текст уведомления.',
 
+    LOGIN_FAILED: 'Вход не удался.',
+    EMAIL_TAKEN: 'Пользователь с такой электронной почтой уже существует.',
     NOT_AN_EMAIL: 'Это не адрес электронной почты.',
     TOO_MANY_WORDS: 'Введите только одно слово.',
     SHOULD_BE_THREE_WORDS: 'ФИО должно состоять из трёх слов.',
@@ -31,6 +31,10 @@ export const ERROR_MESSAGES = {
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
 
+    ELEMENT_NOT_FOUND: 'Элемент не найден.',
+    GROUP_NOT_FOUND: 'Группа не найдена.',
+    COURSE_NOT_FOUND: 'Курс не найден.',
+
     PROFILE_EDIT_SUCCESS: 'Профиль изменён.',
     GROUP_RENAME_SUCCESS: 'Группа переименована.',
     GROUP_CREATE_SUCCESS: 'Группа создана.',
@@ -39,8 +43,5 @@ export const ERROR_MESSAGES = {
     COURSE_EDIT_SUCCESS: 'Курс изменён.',
     COURSE_DELETE_SUCCESS: 'Курс удалён.',
     COURSE_STATUS_EDIT_SUCCESS: 'Статус курса изменён.',
-
-    ELEMENT_NOT_FOUND: 'Элемент не найден.',
-    GROUP_NOT_FOUND: 'Группа не найдена.',
-    COURSE_NOT_FOUND: 'Курс не найден.',
+    COURSE_NOTIFICATION_CREATE_SUCCESS: 'Уведомление создано.',
 }

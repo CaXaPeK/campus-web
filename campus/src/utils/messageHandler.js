@@ -78,3 +78,7 @@ export const showCourseDeleteSuccess = () => {
 export const showCourseStatusEditSuccess = () => {
     showSuccess(ERROR_MESSAGES.COURSE_STATUS_EDIT_SUCCESS);
 }
+
+export const showCourseNotificationCreateSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_NOTIFICATION_CREATE_SUCCESS);
+}

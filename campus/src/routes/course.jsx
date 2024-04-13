@@ -1,7 +1,7 @@
 import {
     Badge,
     Button,
-    Card,
+    Card, Checkbox,
     DatePicker,
     Divider,
     Flex,
@@ -27,12 +27,12 @@ import {
 import {ERROR_MESSAGES} from "../constants/errorMessages.js";
 import dayjs from "dayjs";
 import ReactQuill from "react-quill";
-import {DebounceSelect, fetchUserList} from "../components/courses/selectWithUserList.jsx";
 import {axiosCourseEdit} from "../api/requests/courseEditRequest.js";
-import {axiosGroupDelete} from "../api/requests/groupDeleteRequest.js";
 import {axiosCourseDelete} from "../api/requests/courseDeleteRequest.js";
 import {ROUTES} from "../constants/routes.js";
 import {axiosCourseStatusEdit} from "../api/requests/courseStatusEditRequest.js";
+import TextArea from "antd/es/input/TextArea.js";
+import {axiosCourseNotificationCreate} from "../api/requests/courseNotificationCreateRequest.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -48,8 +48,10 @@ const CoursePage = () => {
 
     const [isEditCourseModalOpen, setIsEditCourseModalOpen] = useState(false);
     const [isEditCourseStatusModalOpen, setIsEditCourseStatusModalOpen] = useState(false);
+    const [isCreateNotificationModalOpen, setIsCreateNotificationModalOpen] = useState(false);
     const [editCourseForm] = Form.useForm();
     const [editCourseStatusForm] = Form.useForm();
+    const [createNotificationForm] = Form.useForm();
 
     let notificationListData = data.notifications != null ? data.notifications.map(notification => ({
         data: notification
@@ -69,6 +71,10 @@ const CoursePage = () => {
 
     const showEditCourseStatusModal = () => {
         setIsEditCourseStatusModalOpen(true);
+    };
+
+    const showCreateNotificationModal = () => {
+        setIsCreateNotificationModalOpen(true);
     };
 
     const handleEditCourseFinish = async (values) => {
@@ -98,7 +104,19 @@ const CoursePage = () => {
         } catch (error) {
 
         }
-        setIsEditCourseStatusModalOpen(false);
+        setIsCreateNotificationModalOpen(false);
+    }
+
+    const handleCreateNotificationFinish = async (values) => {
+        console.log(values.isImportant)
+        try {
+            await axiosCourseNotificationCreate(courseId, values.text, values.isImportant);
+            setUpdates(!updates);
+            setIsCreateNotificationModalOpen(false);
+        } catch (error) {
+
+        }
+        setIsCreateNotificationModalOpen(false);
     }
 
     const handleEditCourseOk = () => {
@@ -109,9 +127,14 @@ const CoursePage = () => {
         editCourseStatusForm.submit();
     };
 
+    const handleCreateNotificationOk = () => {
+        createNotificationForm.submit();
+    };
+
     const handleCancel = () => {
         setIsEditCourseModalOpen(false);
         setIsEditCourseStatusModalOpen(false);
+        setIsCreateNotificationModalOpen(false);
     };
 
     const deleteCourse = async () => {
@@ -170,7 +193,7 @@ const CoursePage = () => {
                 </>
             ),
             children: <>
-                <Button type='primary'><PlusCircleOutlined /> СОЗДАТЬ УВЕДОМЛЕНИЕ</Button>
+                <Button onClick={showCreateNotificationModal} type='primary'><PlusCircleOutlined /> СОЗДАТЬ УВЕДОМЛЕНИЕ</Button>
                 <List
                     style={{marginTop: 8}}
                     dataSource={notificationListData}
@@ -415,6 +438,31 @@ const CoursePage = () => {
                             <Radio value="Finished"> Закрыт </Radio>
                         </Radio.Group>
                     </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal
+                title="Создание уведомления"
+                open={isCreateNotificationModalOpen}
+                onOk={handleCreateNotificationOk}
+                onCancel={handleCancel}
+                okText='Создать'
+            >
+                <Form form={createNotificationForm} onFinish={handleCreateNotificationFinish} >
+                    <Form.Item
+                        name='text' rules={[
+                        { required: true, message: ERROR_MESSAGES.ENTER_NOTIFICATION_TEXT },]}
+                    >
+                        <TextArea rows={4} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name='isImportant'
+                        valuePropName='checked'
+                    >
+                        <Checkbox>Важное</Checkbox>
+                    </Form.Item>
+
                 </Form>
             </Modal>
             {contextHolder}
