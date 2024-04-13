@@ -4,8 +4,12 @@ import {useEffect, useState} from "react";
 import {fetchGetApi} from "../api/fetchGetApi.js";
 import {API_URLS} from "../constants/apiUrls.js";
 import {useParams} from "react-router";
-import {statusColors, statusNames} from "../constants/statusMetadata.js";
-import CoursePreviewListItem from "../components/courses/coursePreviewListItem.jsx";
+import {
+    courseStatusColors,
+    courseStatusNames, markStatusColors, markStatusNames,
+    studentStatusColors,
+    studentStatusNames
+} from "../constants/statusMetadata.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -22,6 +26,10 @@ const CoursePage = () => {
 
     let teacherListData = data.teachers != null ? data.teachers.map(teacher => ({
         data: teacher
+    })) : [];
+
+    let studentListData = data.students != null ? data.students.map(student => ({
+        data: student
     })) : [];
 
     const infoTabsItems = [
@@ -81,7 +89,35 @@ const CoursePage = () => {
         {
             key: '2',
             label: 'Студенты',
-            children: <></>
+            children: <List
+                style={{marginTop: 8}}
+                dataSource={studentListData}
+                renderItem={(item, index) => (
+                    <List.Item>
+                        <div>
+                            <b>{item.data.name}</b>
+                            <br/>
+                            <div style={{color: 'gray'}}>
+                                Статус: <span style={{color: studentStatusColors[item.data.status]}}>{studentStatusNames[item.data.status]}</span>
+                                <br/>
+                                {item.data.email}
+                            </div>
+                        </div>
+                        {item.data.status == 'Accepted' ? <a>
+                            Промежуточная аттестация
+                            <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.midtermResult]}>{markStatusNames[item.data.midtermResult]}</Tag>
+                        </a> : null}
+                        {item.data.status == 'Accepted' ? <a>
+                            Финальная аттестация
+                            <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.finalResult]}>{markStatusNames[item.data.finalResult]}</Tag>
+                        </a> : null}
+                        {item.data.status == 'InQueue' ? <div>
+                            <Button style={{marginRight: 8}} type='primary'>ПРИНЯТЬ</Button>
+                            <Button type='primary' danger>ОТКЛОНИТЬ</Button>
+                        </div> : null}
+                    </List.Item>
+                )}
+            />
         }
     ];
 
@@ -103,7 +139,7 @@ const CoursePage = () => {
                 <Flex justify='space-between'>
                     <div>
                         <b>Статус курса</b>
-                        <div style={{ color: statusColors[data.status] }}>{statusNames[data.status]}</div>
+                        <div style={{ color: courseStatusColors[data.status] }}>{courseStatusNames[data.status]}</div>
                     </div>
                     <Button type="primary" style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ СТАТУС</Button>
                 </Flex>

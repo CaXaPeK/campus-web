@@ -1,6 +1,5 @@
-import {Button, List, Tag} from "antd";
-import Column from "antd/es/table/Column.js";
-import {statusColors, statusNames} from "../../constants/statusMetadata.js";
+import {List, Tag} from "antd";
+import {courseStatusColors, courseStatusNames} from "../../constants/statusMetadata.js";
 
 const CoursePreviewListItem = ({ name, id, startYear, maximumStudentsCount, remainingSlotsCount, status, semester }) => {
     return (
@@ -16,7 +15,7 @@ const CoursePreviewListItem = ({ name, id, startYear, maximumStudentsCount, rema
                     </>
                 }
             />
-            <Tag color={statusColors[status]}>{statusNames[status]}</Tag>
+            <Tag color={courseStatusColors[status]}>{courseStatusNames[status]}</Tag>
         </List.Item>
     );
 }
