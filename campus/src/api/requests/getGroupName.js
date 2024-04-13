@@ -1,6 +1,5 @@
 import {api} from "../axiosInstance.js";
 import {API_URLS} from "../../constants/apiUrls.js";
-import {ROUTES} from "../../constants/routes.js";
 
 export const getGroupName = async (groupId, setGroupName) => {
     try {

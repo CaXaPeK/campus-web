@@ -1,21 +1,8 @@
 import {Button, List, Tag} from "antd";
 import Column from "antd/es/table/Column.js";
+import {statusColors, statusNames} from "../../constants/statusMetadata.js";
 
 const CoursePreviewListItem = ({ name, id, startYear, maximumStudentsCount, remainingSlotsCount, status, semester }) => {
-    const statusColors = {
-        OpenForAssigning: 'green',
-        Finished: 'red',
-        Created: 'gray',
-        Started: 'blue'
-    }
-
-    const statusNames = {
-        OpenForAssigning: 'Открыт для записи',
-        Finished: 'Закрыт',
-        Created: 'Создан',
-        Started: 'В процессе обучения'
-    }
-
     return (
         <List.Item>
             <List.Item.Meta
