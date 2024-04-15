@@ -18,6 +18,7 @@ export const ERROR_MESSAGES = {
     SELECT_COURSE_STATUS: 'Выберите статус.',
     ENTER_NOTIFICATION_TEXT: 'Введите текст уведомления.',
     SELECT_TEACHER: 'Выберите преподавателя.',
+    SELECT_MARK_STATUS: 'Выберите отметку.',
 
     LOGIN_FAILED: 'Вход не удался.',
     EMAIL_TAKEN: 'Пользователь с такой электронной почтой уже существует.',
@@ -48,5 +49,6 @@ export const ERROR_MESSAGES = {
     COURSE_DELETE_SUCCESS: 'Курс удалён.',
     COURSE_STATUS_EDIT_SUCCESS: 'Статус курса изменён.',
     COURSE_NOTIFICATION_CREATE_SUCCESS: 'Уведомление создано.',
-    COURSE_TEACHER_ADD_SUCCESS: 'Преподаватель добавлен.'
+    COURSE_TEACHER_ADD_SUCCESS: 'Преподаватель добавлен.',
+    COURSE_STUDENT_MARK_EDIT_SUCCESS: 'Отметка изменена.'
 }

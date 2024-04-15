@@ -35,6 +35,7 @@ import TextArea from "antd/es/input/TextArea.js";
 import {axiosCourseNotificationCreate} from "../api/requests/courseNotificationCreateRequest.js";
 import {axiosCourseTeacherAdd} from "../api/requests/courseTeacherAddRequest.js";
 import {DebounceSelect, fetchUserList} from "../components/courses/selectWithUserList.jsx";
+import {axiosCourseStudentMarkEdit} from "../api/requests/courseStudentMarkEditRequest.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -48,15 +49,19 @@ const CoursePage = () => {
     const [requirements, setRequirements] = useState('');
     const [annotations, setAnnotations] = useState('');
     const [selectedTeacher, setSelectedTeacher] = useState('');
+    const [selectedStudentIndex, setSelectedStudentIndex] = useState(0);
+    const [selectedMarkType, setSelectedMarkType] = useState('');
 
     const [isEditCourseModalOpen, setIsEditCourseModalOpen] = useState(false);
     const [isEditCourseStatusModalOpen, setIsEditCourseStatusModalOpen] = useState(false);
     const [isCreateNotificationModalOpen, setIsCreateNotificationModalOpen] = useState(false);
     const [isAddTeacherModalOpen, setIsAddTeacherModalOpen] = useState(false);
+    const [isEditMarkModalOpen, setIsEditMarkModalOpen] = useState(false);
     const [editCourseForm] = Form.useForm();
     const [editCourseStatusForm] = Form.useForm();
     const [createNotificationForm] = Form.useForm();
     const [addTeacherForm] = Form.useForm();
+    const [editMarkForm] = Form.useForm();
 
     let notificationListData = data.notifications != null ? data.notifications.map(notification => ({
         data: notification
@@ -84,6 +89,10 @@ const CoursePage = () => {
 
     const showAddTeacherModal = () => {
         setIsAddTeacherModalOpen(true);
+    };
+
+    const showEditMarkModal = () => {
+        setIsEditMarkModalOpen(true);
     };
 
     const handleEditCourseFinish = async (values) => {
@@ -135,6 +144,16 @@ const CoursePage = () => {
         }
     }
 
+    const handleEditMarkFinish = async (values) => {
+        try {
+            await axiosCourseStudentMarkEdit(courseId, studentListData[selectedStudentIndex].data.id, selectedMarkType, values.mark);
+            setUpdates(!updates);
+            setIsEditMarkModalOpen(false);
+        } catch (error) {
+
+        }
+    }
+
     const handleEditCourseOk = () => {
         editCourseForm.submit();
     };
@@ -151,11 +170,16 @@ const CoursePage = () => {
         addTeacherForm.submit();
     };
 
+    const handleEditMarkOk = () => {
+        editMarkForm.submit();
+    };
+
     const handleCancel = () => {
         setIsEditCourseModalOpen(false);
         setIsEditCourseStatusModalOpen(false);
         setIsCreateNotificationModalOpen(false);
         setIsAddTeacherModalOpen(false);
+        setIsEditMarkModalOpen(false);
     };
 
     const deleteCourse = async () => {
@@ -173,16 +197,11 @@ const CoursePage = () => {
     const [modal, contextHolder] = Modal.useModal();
     const config = {
         title: 'Подождите!',
-        content: (
-            <>
-                Вы точно хотите удалить этот курс?
-            </>
-        )
+        content: 'Вы точно хотите удалить этот курс?'
     }
 
     useEffect(() => {
         if (data.length != []) {
-            console.log(data)
             editCourseForm.setFieldsValue({
                 name: data.name,
                 startYear: dayjs().set('year', data.startYear),
@@ -265,11 +284,11 @@ const CoursePage = () => {
                                 {item.data.email}
                             </div>
                         </div>
-                        {item.data.status == 'Accepted' ? <a>
+                        {item.data.status == 'Accepted' ? <a onClick={() => {setSelectedStudentIndex(index); setSelectedMarkType('Midterm'); showEditMarkModal()}}>
                             Промежуточная аттестация
                             <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.midtermResult]}>{markStatusNames[item.data.midtermResult]}</Tag>
                         </a> : null}
-                        {item.data.status == 'Accepted' ? <a>
+                        {item.data.status == 'Accepted' ? <a onClick={() => {setSelectedStudentIndex(index); setSelectedMarkType('Final'); showEditMarkModal()}}>
                             Финальная аттестация
                             <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.finalResult]}>{markStatusNames[item.data.finalResult]}</Tag>
                         </a> : null}
@@ -444,22 +463,22 @@ const CoursePage = () => {
                 okText='Сохранить'
             >
                 <Form
-                    form={editCourseStatusForm}
-                    onFinish={handleEditCourseStatusFinish}
-                    layout='vertical'
+                form={editCourseStatusForm}
+                onFinish={handleEditCourseStatusFinish}
+                layout='vertical'
+            >
+                <Form.Item
+                    name='status'
+                    rules={[
+                        { required: true, message: ERROR_MESSAGES.SELECT_COURSE_STATUS },]}
                 >
-                    <Form.Item
-                        name='status'
-                        rules={[
-                            { required: true, message: ERROR_MESSAGES.SELECT_COURSE_STATUS },]}
-                    >
-                        <Radio.Group>
-                            <Radio value="OpenForAssigning"> Открыт для записи </Radio>
-                            <Radio value="Started"> В процессе </Radio>
-                            <Radio value="Finished"> Закрыт </Radio>
-                        </Radio.Group>
-                    </Form.Item>
-                </Form>
+                    <Radio.Group>
+                        <Radio value="OpenForAssigning"> Открыт для записи </Radio>
+                        <Radio value="Started"> В процессе </Radio>
+                        <Radio value="Finished"> Закрыт </Radio>
+                    </Radio.Group>
+                </Form.Item>
+            </Form>
             </Modal>
 
             <Modal
@@ -509,6 +528,32 @@ const CoursePage = () => {
                         />
                     </Form.Item>
 
+                </Form>
+            </Modal>
+
+            <Modal
+                title={"Изменение отметки для " + (selectedMarkType == "Midterm" ? "промежуточной" : "финальной") + " аттестации"}
+                open={isEditMarkModalOpen}
+                onOk={handleEditMarkOk}
+                onCancel={handleCancel}
+                okText='Сохранить'
+            >
+                Студент: {data.students && selectedStudentIndex !== undefined && data.students[selectedStudentIndex] ? data.students[selectedStudentIndex].name : null}
+                <Form
+                    form={editMarkForm}
+                    onFinish={handleEditMarkFinish}
+                    layout='vertical'
+                >
+                    <Form.Item
+                        name='mark'
+                        rules={[
+                            { required: true, message: ERROR_MESSAGES.SELECT_MARK_STATUS },]}
+                    >
+                        <Radio.Group>
+                            <Radio value="Passed">Пройдена</Radio>
+                            <Radio value="Failed">Провалена</Radio>
+                        </Radio.Group>
+                    </Form.Item>
                 </Form>
             </Modal>
             {contextHolder}

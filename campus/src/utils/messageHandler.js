@@ -98,3 +98,7 @@ export const showCourseNotificationCreateSuccess = () => {
 export const showCourseTeacherAddSuccess = () => {
     showSuccess(ERROR_MESSAGES.COURSE_TEACHER_ADD_SUCCESS);
 }
+
+export const showCourseStudentMarkEditSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_STUDENT_MARK_EDIT_SUCCESS);
+}
