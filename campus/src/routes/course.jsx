@@ -33,6 +33,8 @@ import {ROUTES} from "../constants/routes.js";
 import {axiosCourseStatusEdit} from "../api/requests/courseStatusEditRequest.js";
 import TextArea from "antd/es/input/TextArea.js";
 import {axiosCourseNotificationCreate} from "../api/requests/courseNotificationCreateRequest.js";
+import {axiosCourseTeacherAdd} from "../api/requests/courseTeacherAddRequest.js";
+import {DebounceSelect, fetchUserList} from "../components/courses/selectWithUserList.jsx";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -45,13 +47,16 @@ const CoursePage = () => {
 
     const [requirements, setRequirements] = useState('');
     const [annotations, setAnnotations] = useState('');
+    const [selectedTeacher, setSelectedTeacher] = useState('');
 
     const [isEditCourseModalOpen, setIsEditCourseModalOpen] = useState(false);
     const [isEditCourseStatusModalOpen, setIsEditCourseStatusModalOpen] = useState(false);
     const [isCreateNotificationModalOpen, setIsCreateNotificationModalOpen] = useState(false);
+    const [isAddTeacherModalOpen, setIsAddTeacherModalOpen] = useState(false);
     const [editCourseForm] = Form.useForm();
     const [editCourseStatusForm] = Form.useForm();
     const [createNotificationForm] = Form.useForm();
+    const [addTeacherForm] = Form.useForm();
 
     let notificationListData = data.notifications != null ? data.notifications.map(notification => ({
         data: notification
@@ -75,6 +80,10 @@ const CoursePage = () => {
 
     const showCreateNotificationModal = () => {
         setIsCreateNotificationModalOpen(true);
+    };
+
+    const showAddTeacherModal = () => {
+        setIsAddTeacherModalOpen(true);
     };
 
     const handleEditCourseFinish = async (values) => {
@@ -104,11 +113,9 @@ const CoursePage = () => {
         } catch (error) {
 
         }
-        setIsCreateNotificationModalOpen(false);
     }
 
     const handleCreateNotificationFinish = async (values) => {
-        console.log(values.isImportant)
         try {
             await axiosCourseNotificationCreate(courseId, values.text, values.isImportant);
             setUpdates(!updates);
@@ -116,7 +123,16 @@ const CoursePage = () => {
         } catch (error) {
 
         }
-        setIsCreateNotificationModalOpen(false);
+    }
+
+    const handleAddTeacherFinish = async (values) => {
+        try {
+            await axiosCourseTeacherAdd(courseId, values.teacherId.value);
+            setUpdates(!updates);
+            setIsAddTeacherModalOpen(false);
+        } catch (error) {
+
+        }
     }
 
     const handleEditCourseOk = () => {
@@ -131,10 +147,15 @@ const CoursePage = () => {
         createNotificationForm.submit();
     };
 
+    const handleAddTeacherOk = () => {
+        addTeacherForm.submit();
+    };
+
     const handleCancel = () => {
         setIsEditCourseModalOpen(false);
         setIsEditCourseStatusModalOpen(false);
         setIsCreateNotificationModalOpen(false);
+        setIsAddTeacherModalOpen(false);
     };
 
     const deleteCourse = async () => {
@@ -212,7 +233,7 @@ const CoursePage = () => {
             key: '1',
             label: 'Преподаватели',
             children : <>
-                <Button type='primary'><PlusCircleOutlined /> ДОБАВИТЬ ПРЕПОДАВАТЕЛЯ</Button>
+                <Button onClick={showAddTeacherModal} type='primary'><PlusCircleOutlined /> ДОБАВИТЬ ПРЕПОДАВАТЕЛЯ</Button>
                 <List
                     style={{marginTop: 8}}
                     dataSource={teacherListData}
@@ -461,6 +482,31 @@ const CoursePage = () => {
                         valuePropName='checked'
                     >
                         <Checkbox>Важное</Checkbox>
+                    </Form.Item>
+
+                </Form>
+            </Modal>
+
+            <Modal
+                title="Добавление преподавателя на курс"
+                open={isAddTeacherModalOpen}
+                onOk={handleAddTeacherOk}
+                onCancel={handleCancel}
+                okText='Добавить'
+            >
+                <Form form={addTeacherForm} onFinish={handleAddTeacherFinish} >
+                    <Form.Item
+                        name='teacherId' rules={[
+                        { required: true, message: ERROR_MESSAGES.SELECT_TEACHER },]}
+                    >
+                        <DebounceSelect
+                            value={selectedTeacher}
+                            fetchOptions={fetchUserList}
+                            placeholder="Выберите пользователя"
+                            onChange={(newValue) => {
+                                setSelectedTeacher(newValue);
+                            }}
+                        />
                     </Form.Item>
 
                 </Form>

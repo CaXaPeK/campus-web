@@ -27,6 +27,14 @@ export const showEmailTaken = () => {
     showError(ERROR_MESSAGES.EMAIL_TAKEN);
 }
 
+export const showUserIsAlreadyTeacher = () => {
+    showError(ERROR_MESSAGES.USER_IS_ALREADY_TEACHER);
+}
+
+export const showUserIsAlreadyStudent = () => {
+    showError(ERROR_MESSAGES.USER_IS_ALREADY_STUDENT);
+}
+
 export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }
@@ -81,4 +89,8 @@ export const showCourseStatusEditSuccess = () => {
 
 export const showCourseNotificationCreateSuccess = () => {
     showSuccess(ERROR_MESSAGES.COURSE_NOTIFICATION_CREATE_SUCCESS);
+}
+
+export const showCourseTeacherAddSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_TEACHER_ADD_SUCCESS);
 }

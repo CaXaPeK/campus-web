@@ -17,6 +17,7 @@ export const ERROR_MESSAGES = {
     SELECT_MAIN_TEACHER: 'Выберите основного преподавателя.',
     SELECT_COURSE_STATUS: 'Выберите статус.',
     ENTER_NOTIFICATION_TEXT: 'Введите текст уведомления.',
+    SELECT_TEACHER: 'Выберите преподавателя.',
 
     LOGIN_FAILED: 'Вход не удался.',
     EMAIL_TAKEN: 'Пользователь с такой электронной почтой уже существует.',
@@ -27,6 +28,8 @@ export const ERROR_MESSAGES = {
     PASSWORD_NO_NUMBERS: 'Пароль должен содержать как минимум 1 цифру.',
     PASSWORDS_DONT_MATCH: 'Введенные пароли не совпадают.',
     CAPACITY_CANNOT_BE_LESS: 'Количество мест не может быть меньше количества зачисленных студентов.',
+    USER_IS_ALREADY_TEACHER: 'Этот пользователь уже является преподавателем на данном курсе.',
+    USER_IS_ALREADY_STUDENT: 'Этот пользователь уже является студентом на данном курсе.',
 
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
@@ -44,4 +47,5 @@ export const ERROR_MESSAGES = {
     COURSE_DELETE_SUCCESS: 'Курс удалён.',
     COURSE_STATUS_EDIT_SUCCESS: 'Статус курса изменён.',
     COURSE_NOTIFICATION_CREATE_SUCCESS: 'Уведомление создано.',
+    COURSE_TEACHER_ADD_SUCCESS: 'Преподаватель добавлен.'
 }

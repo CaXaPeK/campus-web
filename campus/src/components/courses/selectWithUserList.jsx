@@ -8,6 +8,7 @@ export function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }
     const [fetching, setFetching] = useState(false);
     const [options, setOptions] = useState([]);
     const fetchRef = useRef(0);
+    const [inputValue, setInputValue] = useState('');
     const debounceFetcher = useMemo(() => {
         const loadOptions = async (value) => {
             fetchRef.current += 1;
@@ -30,13 +31,16 @@ export function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }
     }, [fetchOptions, debounceTimeout]);
 
     useEffect(() => {
-        debounceFetcher('');
-    }, [debounceFetcher]);
+        debounceFetcher(inputValue);
+    }, [debounceFetcher, inputValue]);
 
     return (
         <Select
             labelInValue
-            filterOption={false}
+            filterOption={(input, option) =>
+                option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            onSearch={setInputValue}
             notFoundContent={fetching ? <Spin size="small" /> : null}
             {...props}
             options={options}

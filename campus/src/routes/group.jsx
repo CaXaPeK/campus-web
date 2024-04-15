@@ -107,7 +107,7 @@ const GroupPage = ({mode}) => {
                     />
                 )}
             />
-            {user.isAdmin ? (
+            {user.isAdmin && mode == 'public' ? (
                 <Button type='primary' onClick={showCreateModal}><PlusCircleOutlined /> СОЗДАТЬ КУРС</Button>
             ) : null}
 
