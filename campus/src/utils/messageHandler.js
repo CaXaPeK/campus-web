@@ -35,6 +35,10 @@ export const showUserIsAlreadyStudent = () => {
     showError(ERROR_MESSAGES.USER_IS_ALREADY_STUDENT);
 }
 
+export const showCantAssignPreviousStatus = () => {
+    showError(ERROR_MESSAGES.CANT_ASSIGN_PREVIOUS_STATUS);
+}
+
 export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }

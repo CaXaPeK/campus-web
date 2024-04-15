@@ -1,6 +1,7 @@
 import {api} from "../axiosInstance.js";
 import {API_URLS} from "../../constants/apiUrls.js";
 import {
+    showCantAssignPreviousStatus,
     showCourseStatusEditSuccess,
     showError,
     showUnauthorizedError
@@ -13,8 +14,13 @@ export const axiosCourseStatusEdit = async (id, status) => {
         return response;
     }
     catch (error) {
+        const errorMessage = error.response.data.message;
+
         if (error.response.status == 401) {
             showUnauthorizedError();
+        }
+        else if (errorMessage == "Course status cannot be changed to a previous one.") {
+            showCantAssignPreviousStatus();
         }
         else {
             console.log(error)

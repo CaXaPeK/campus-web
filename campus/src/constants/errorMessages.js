@@ -30,6 +30,7 @@ export const ERROR_MESSAGES = {
     CAPACITY_CANNOT_BE_LESS: 'Количество мест не может быть меньше количества зачисленных студентов.',
     USER_IS_ALREADY_TEACHER: 'Этот пользователь уже является преподавателем на данном курсе.',
     USER_IS_ALREADY_STUDENT: 'Этот пользователь уже является студентом на данном курсе.',
+    CANT_ASSIGN_PREVIOUS_STATUS: 'Активному курсу нельзя присвоить статус «Открыт для записи».',
 
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
