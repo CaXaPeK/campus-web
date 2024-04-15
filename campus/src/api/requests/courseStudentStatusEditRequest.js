@@ -2,7 +2,7 @@ import {api} from "../axiosInstance.js";
 import {API_URLS} from "../../constants/apiUrls.js";
 import {
     showCantEditStudentStatus, showCourseStudentStatusEditSuccess,
-    showError,
+    showError, showMaximumStudentsCountReached,
     showUnauthorizedError
 } from "../../utils/messageHandler.js";
 
@@ -22,6 +22,9 @@ export const axiosCourseStudentStatusEdit = async (courseId, studentId, newStatu
         }
         else if (errorMessage === "This student is not in queue. Their status cannot be changed.") {
             showCantEditStudentStatus();
+        }
+        else if (errorMessage === "Maximum student count reached.") {
+            showMaximumStudentsCountReached();
         }
         else {
             showError(errorMessage)

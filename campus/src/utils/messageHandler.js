@@ -47,6 +47,10 @@ export const showUserAlreadySignedUp = () => {
     showError(ERROR_MESSAGES.USER_ALREADY_SIGNED_UP);
 }
 
+export const showMaximumStudentsCountReached = () => {
+    showError(ERROR_MESSAGES.MAXIMUM_STUDENTS_COUNT_REACHED);
+}
+
 export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }

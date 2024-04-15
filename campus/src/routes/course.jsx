@@ -39,6 +39,9 @@ import {axiosCourseStudentMarkEdit} from "../api/requests/courseStudentMarkEditR
 import {useSelector} from "react-redux";
 import {axiosCourseSignUp} from "../api/requests/courseSignUpRequest.js";
 import {axiosCourseStudentStatusEdit} from "../api/requests/courseStudentStatusEditRequest.js";
+import {
+    axiosCourseRequirementsAndAnnotationsEdit
+} from "../api/requests/courseEditRequirementsAndAnnotationsRequest.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
@@ -79,6 +82,12 @@ const CoursePage = () => {
         data: student
     })) : [];
 
+    const userIsAdminOrTeacher = () => {
+        return user.isAdmin ||
+            (Array.isArray(data.teachers) &&
+                data.teachers.find(teacher => teacher.email === localStorage.getItem('email')) !== undefined);
+    }
+
     const showEditCourseModal = () => {
         setIsEditCourseModalOpen(true);
     };
@@ -101,21 +110,25 @@ const CoursePage = () => {
 
     const handleEditCourseFinish = async (values) => {
         try {
-            await axiosCourseEdit(
-                courseId,
-                values.name,
-                dayjs(values.startYear).year(),
-                values.maximumStudentsCount,
-                values.semester,
-                values.requirements,
-                values.annotations
-            );
+            if (user.isAdmin) {
+                await axiosCourseEdit(
+                    courseId,
+                    values.name,
+                    dayjs(values.startYear).year(),
+                    values.maximumStudentsCount,
+                    values.semester,
+                    values.requirements,
+                    values.annotations
+                );
+            }
+            else {
+                await axiosCourseRequirementsAndAnnotationsEdit(courseId, values.requirements, values.annotations);
+            }
             setUpdates(!updates);
             setIsEditCourseModalOpen(false);
         } catch (error) {
 
         }
-        setIsEditCourseModalOpen(false);
     }
 
     const handleEditCourseStatusFinish = async (values) => {
@@ -209,7 +222,7 @@ const CoursePage = () => {
 
     const changeStudentStatus = async (index, newStatus) => {
         try {
-            await axiosCourseStudentStatusEdit(courseId, data.students[selectedStudentIndex].id, newStatus);
+            await axiosCourseStudentStatusEdit(courseId, data.students[index].id, newStatus);
             setUpdates(!updates);
         } catch (error) {
 
@@ -255,7 +268,7 @@ const CoursePage = () => {
                 </>
             ),
             children: <>
-                <Button onClick={showCreateNotificationModal} type='primary'><PlusCircleOutlined /> СОЗДАТЬ УВЕДОМЛЕНИЕ</Button>
+                { userIsAdminOrTeacher() ? <Button onClick={showCreateNotificationModal} type='primary'><PlusCircleOutlined /> СОЗДАТЬ УВЕДОМЛЕНИЕ</Button> : null}
                 <List
                     style={{marginTop: 8}}
                     dataSource={notificationListData}
@@ -274,7 +287,9 @@ const CoursePage = () => {
             key: '1',
             label: 'Преподаватели',
             children : <>
-                <Button onClick={showAddTeacherModal} type='primary'><PlusCircleOutlined /> ДОБАВИТЬ ПРЕПОДАВАТЕЛЯ</Button>
+                { user.isAdmin ?
+                    <Button onClick={showAddTeacherModal} type='primary'><PlusCircleOutlined /> ДОБАВИТЬ ПРЕПОДАВАТЕЛЯ</Button>
+                : null}
                 <List
                     style={{marginTop: 8}}
                     dataSource={teacherListData}
@@ -306,17 +321,37 @@ const CoursePage = () => {
                                 {item.data.email}
                             </div>
                         </div>
-                        {item.data.status == 'Accepted' ? <a onClick={() => {setSelectedStudentIndex(index); setSelectedMarkType('Midterm'); showEditMarkModal()}}>
-                            Промежуточная аттестация
-                            <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.midtermResult]}>{markStatusNames[item.data.midtermResult]}</Tag>
-                        </a> : null}
-                        {item.data.status == 'Accepted' ? <a onClick={() => {setSelectedStudentIndex(index); setSelectedMarkType('Final'); showEditMarkModal()}}>
-                            Финальная аттестация
-                            <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.finalResult]}>{markStatusNames[item.data.finalResult]}</Tag>
-                        </a> : null}
+                        {item.data.status == 'Accepted' && item.data.midtermResult !== null ?
+                            <div>
+                                {userIsAdminOrTeacher() ? (
+                                    <a onClick={() => {
+                                        setSelectedStudentIndex(index);
+                                        setSelectedMarkType('Midterm');
+                                        showEditMarkModal()
+                                    }}>
+                                        Промежуточная аттестация
+                                    </a>
+                                ) : "Промежуточная аттестация"}
+                                <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.midtermResult]}>{markStatusNames[item.data.midtermResult]}</Tag>
+                            </div>
+                            : null}
+                        {item.data.status == 'Accepted' && item.data.finalResult !== null ?
+                            <div>
+                                {userIsAdminOrTeacher() ? (
+                                    <a onClick={() => {
+                                        setSelectedStudentIndex(index);
+                                        setSelectedMarkType('Final');
+                                        showEditMarkModal()
+                                    }}>
+                                        Финальная аттестация
+                                    </a>
+                                ) : "Финальная аттестация"}
+                                <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.finalResult]}>{markStatusNames[item.data.finalResult]}</Tag>
+                            </div>
+                            : null}
                         {item.data.status == 'InQueue' ? <div>
-                            <Button onClick={() => { setSelectedStudentIndex(index); changeStudentStatus(index, 'Accepted') }} style={{marginRight: 8}} type='primary'>ПРИНЯТЬ</Button>
-                            <Button onClick={() => { setSelectedStudentIndex(index); changeStudentStatus(index, 'Declined') }} type='primary' danger>ОТКЛОНИТЬ</Button>
+                            <Button onClick={() => { changeStudentStatus(index, 'Accepted') }} style={{marginRight: 8}} type='primary'>ПРИНЯТЬ</Button>
+                            <Button onClick={() => { changeStudentStatus(index, 'Declined') }} type='primary' danger>ОТКЛОНИТЬ</Button>
                         </div> : null}
                     </List.Item>
                 )}
@@ -335,19 +370,28 @@ const CoursePage = () => {
                 style={{width: '60%', minWidth: '450px', marginBottom: '16px'}}
             >
                 <h1>{data.name}</h1>
-                <Divider />
+                <Divider/>
                 <Flex justify='space-between'>
                     <h2>Основные данные курса</h2>
                     <div>
-                        { Array.isArray(data.teachers) &&
+                        {Array.isArray(data.teachers) &&
                         data.teachers.find(teacher => teacher.email === localStorage.getItem('email')) === undefined &&
                         data.students.find(student => student.email === localStorage.getItem('email')) === undefined &&
                         data.status === "OpenForAssigning" ? (
-                            <Button type="primary" onClick={signUp} style={{background: 'green', marginRight: 8, marginBottom: 8}}><CheckCircleOutlined /> ЗАПИСАТЬСЯ</Button>
+                            <Button type="primary" onClick={signUp} style={{
+                                background: 'green',
+                                marginRight: 8,
+                                marginBottom: 8
+                            }}><CheckCircleOutlined/> ЗАПИСАТЬСЯ</Button>
                         ) : null}
 
-                        <Button type="primary" onClick={showEditCourseModal} style={{background: 'orange', marginRight: 8, marginBottom: 8}}><EditOutlined /> ИЗМЕНИТЬ ДАННЫЕ</Button>
-                        <Button type="primary" onClick={deleteCourse} danger><DeleteOutlined /> УДАЛИТЬ КУРС</Button>
+                        {userIsAdminOrTeacher() ? <Button type="primary" onClick={showEditCourseModal} style={{
+                            background: 'orange',
+                            marginRight: 8,
+                            marginBottom: 8
+                        }}><EditOutlined/> ИЗМЕНИТЬ ДАННЫЕ</Button> : null}
+                        {user.isAdmin ? <Button type="primary" onClick={deleteCourse} danger><DeleteOutlined/> УДАЛИТЬ
+                            КУРС</Button> : null}
                     </div>
 
                 </Flex>
@@ -355,16 +399,21 @@ const CoursePage = () => {
                     <Flex justify='space-between'>
                         <div>
                             <b>Статус курса</b>
-                            <div style={{ color: courseStatusColors[data.status] }}>{courseStatusNames[data.status]}</div>
+                            <div style={{color: courseStatusColors[data.status]}}>{courseStatusNames[data.status]}</div>
                         </div>
-                        {data.status != 'Finished' ? <Button type="primary" onClick={showEditCourseStatusModal} style={{marginRight: '8px', marginBottom: '8px', background: 'orange'}}><EditOutlined /> ИЗМЕНИТЬ СТАТУС</Button> : null}
+                        {data.status != 'Finished' && userIsAdminOrTeacher() ?
+                            <Button type="primary" onClick={showEditCourseStatusModal} style={{
+                                marginRight: '8px',
+                                marginBottom: '8px',
+                                background: 'orange'
+                            }}><EditOutlined/> ИЗМЕНИТЬ СТАТУС</Button> : null}
                     </Flex>
 
                     <Divider/>
                     <Flex justify='space-between'>
                         <div style={{width: '50%'}}>
                             <b>Учебный год</b>
-                            <div>{data.startYear + '-' + (data.startYear+1)}</div>
+                            <div>{data.startYear + '-' + (data.startYear + 1)}</div>
                         </div>
                         <div style={{width: '50%'}}>
                             <b>Семестр</b>
@@ -386,12 +435,12 @@ const CoursePage = () => {
                     <b>Заявок на рассмотрении</b>
                     <div>{data.studentsInQueueCount}</div>
                 </Card>
-                    <Tabs
-                        defaultActiveKey="1"
-                        centered
-                        style={{marginTop: '16px'}}
-                        items={infoTabsItems}
-                    />
+                <Tabs
+                    defaultActiveKey="1"
+                    centered
+                    style={{marginTop: '16px'}}
+                    items={infoTabsItems}
+                />
                 <Tabs
                     defaultActiveKey="1"
                     centered
@@ -412,75 +461,83 @@ const CoursePage = () => {
                     onFinish={handleEditCourseFinish}
                     layout='vertical'
                 >
-                    <Form.Item
-                        name='name'
-                        label='Название курса'
-                        rules={[
-                            { required: true, message: ERROR_MESSAGES.ENTER_COURSE_NAME },]}
-                    >
-                        <Input />
-                    </Form.Item>
+                    {user.isAdmin ? (
+                        <>
+                            <Form.Item
+                                name='name'
+                                label='Название курса'
+                                rules={[
+                                    {required: true, message: ERROR_MESSAGES.ENTER_COURSE_NAME},]}
+                            >
+                                <Input/>
+                            </Form.Item>
 
-                    <Form.Item
-                        name='startYear'
-                        label='Год начала курса'
-                        rules={[
-                            { required: true, message: ERROR_MESSAGES.SELECT_START_YEAR },]}
-                    >
-                        <DatePicker
-                            picker='year'
-                            style={{ width: '100%' }}
-                            minDate={dayjs('2000-01-01', 'YYYY-MM-DD')}
-                            maxDate={dayjs('2029-12-31', 'YYYY-MM-DD')}
-                        />
-                    </Form.Item>
+                            <Form.Item
+                                name='startYear'
+                                label='Год начала курса'
+                                rules={[
+                                    {required: true, message: ERROR_MESSAGES.SELECT_START_YEAR},]}
+                            >
+                                <DatePicker
+                                    picker='year'
+                                    style={{width: '100%'}}
+                                    minDate={dayjs('2000-01-01', 'YYYY-MM-DD')}
+                                    maxDate={dayjs('2029-12-31', 'YYYY-MM-DD')}
+                                />
+                            </Form.Item>
 
-                    <Form.Item
-                        name='maximumStudentsCount'
-                        label='Общее количество мест'
-                        rules={[
-                            { required: true, message: ERROR_MESSAGES.ENTER_COURSE_CAPACITY },
-                            () => ({
-                                validator(_, value) {
-                                    if (!value || value >= data.studentsEnrolledCount) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(ERROR_MESSAGES.CAPACITY_CANNOT_BE_LESS));
-                                },
-                            }),
-                        ]}
-                    >
-                        <InputNumber min={1} max={200} style={{ width: '100%' }} />
-                    </Form.Item>
+                            <Form.Item
+                                name='maximumStudentsCount'
+                                label='Общее количество мест'
+                                rules={[
+                                    {required: true, message: ERROR_MESSAGES.ENTER_COURSE_CAPACITY},
+                                    () => ({
+                                        validator(_, value) {
+                                            if (!user.isAdmin) {
+                                                return Promise.resolve();
+                                            }
+                                            if (!value || value >= data.studentsEnrolledCount) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error(ERROR_MESSAGES.CAPACITY_CANNOT_BE_LESS));
+                                        },
+                                    }),
+                                ]}
+                            >
+                                <InputNumber min={1} max={200} style={{width: '100%'}}/>
+                            </Form.Item>
 
-                    <Form.Item
-                        name='semester'
-                        label='Семестр'
-                        rules={[
-                            { required: true, message: ERROR_MESSAGES.SELECT_SEMESTER },]}
-                    >
-                        <Radio.Group>
-                            <Radio value="Autumn"> Осенний </Radio>
-                            <Radio value="Spring"> Весенний </Radio>
-                        </Radio.Group>
-                    </Form.Item>
+                            <Form.Item
+                                name='semester'
+                                label='Семестр'
+                                rules={[
+                                    {required: true, message: ERROR_MESSAGES.SELECT_SEMESTER},]}
+                            >
+                                <Radio.Group>
+                                    <Radio value="Autumn"> Осенний </Radio>
+                                    <Radio value="Spring"> Весенний </Radio>
+                                </Radio.Group>
+                            </Form.Item>
+                        </>
+                    ) : null}
+
 
                     <Form.Item
                         name='requirements'
                         label='Требования'
                         rules={[
-                            { required: true, message: ERROR_MESSAGES.ENTER_REQUIREMENTS },]}
+                            {required: true, message: ERROR_MESSAGES.ENTER_REQUIREMENTS},]}
                     >
-                        <ReactQuill theme="snow" value={requirements} onChange={setRequirements} />
+                        <ReactQuill theme="snow" value={requirements} onChange={setRequirements}/>
                     </Form.Item>
 
                     <Form.Item
                         name='annotations'
                         label='Аннотации'
                         rules={[
-                            { required: true, message: ERROR_MESSAGES.ENTER_ANNOTATIONS },]}
+                            {required: true, message: ERROR_MESSAGES.ENTER_ANNOTATIONS},]}
                     >
-                        <ReactQuill theme="snow" value={annotations} onChange={setAnnotations} />
+                        <ReactQuill theme="snow" value={annotations} onChange={setAnnotations}/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -493,22 +550,22 @@ const CoursePage = () => {
                 okText='Сохранить'
             >
                 <Form
-                form={editCourseStatusForm}
-                onFinish={handleEditCourseStatusFinish}
-                layout='vertical'
-            >
-                <Form.Item
-                    name='status'
-                    rules={[
-                        { required: true, message: ERROR_MESSAGES.SELECT_COURSE_STATUS },]}
+                    form={editCourseStatusForm}
+                    onFinish={handleEditCourseStatusFinish}
+                    layout='vertical'
                 >
-                    <Radio.Group>
-                        <Radio value="OpenForAssigning"> Открыт для записи </Radio>
-                        <Radio value="Started"> В процессе </Radio>
-                        <Radio value="Finished"> Закрыт </Radio>
-                    </Radio.Group>
-                </Form.Item>
-            </Form>
+                    <Form.Item
+                        name='status'
+                        rules={[
+                            {required: true, message: ERROR_MESSAGES.SELECT_COURSE_STATUS},]}
+                    >
+                        <Radio.Group>
+                            <Radio value="OpenForAssigning"> Открыт для записи </Radio>
+                            <Radio value="Started"> В процессе </Radio>
+                            <Radio value="Finished"> Закрыт </Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                </Form>
             </Modal>
 
             <Modal
@@ -518,12 +575,12 @@ const CoursePage = () => {
                 onCancel={handleCancel}
                 okText='Создать'
             >
-                <Form form={createNotificationForm} onFinish={handleCreateNotificationFinish} >
+                <Form form={createNotificationForm} onFinish={handleCreateNotificationFinish}>
                     <Form.Item
                         name='text' rules={[
-                        { required: true, message: ERROR_MESSAGES.ENTER_NOTIFICATION_TEXT },]}
+                        {required: true, message: ERROR_MESSAGES.ENTER_NOTIFICATION_TEXT},]}
                     >
-                        <TextArea rows={4} />
+                        <TextArea rows={4}/>
                     </Form.Item>
 
                     <Form.Item
@@ -543,10 +600,10 @@ const CoursePage = () => {
                 onCancel={handleCancel}
                 okText='Добавить'
             >
-                <Form form={addTeacherForm} onFinish={handleAddTeacherFinish} >
+                <Form form={addTeacherForm} onFinish={handleAddTeacherFinish}>
                     <Form.Item
                         name='teacherId' rules={[
-                        { required: true, message: ERROR_MESSAGES.SELECT_TEACHER },]}
+                        {required: true, message: ERROR_MESSAGES.SELECT_TEACHER},]}
                     >
                         <DebounceSelect
                             value={selectedTeacher}
@@ -577,7 +634,7 @@ const CoursePage = () => {
                     <Form.Item
                         name='mark'
                         rules={[
-                            { required: true, message: ERROR_MESSAGES.SELECT_MARK_STATUS },]}
+                            {required: true, message: ERROR_MESSAGES.SELECT_MARK_STATUS},]}
                     >
                         <Radio.Group>
                             <Radio value="Passed">Пройдена</Radio>

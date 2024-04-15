@@ -34,6 +34,7 @@ export const ERROR_MESSAGES = {
     CANT_ASSIGN_PREVIOUS_STATUS: 'Активному курсу нельзя присвоить статус «Открыт для записи».',
     CANT_EDIT_STUDENT_STATUS: 'Студент уже не находится в очереди. Обновите страницу.',
     USER_ALREADY_SIGNED_UP: 'Вы уже записались на этот курс.',
+    MAXIMUM_STUDENTS_COUNT_REACHED: 'На курсе не осталось свободных мест.',
 
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',

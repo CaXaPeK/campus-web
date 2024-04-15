@@ -16,5 +16,6 @@ export const API_URLS = {
     COURSE_TEACHERS: '/teachers',
     COURSE_MARKS: '/marks',
     COURSE_SIGNUP: '/sign-up',
-    COURSE_STUDENT_STATUS: '/student-status'
+    COURSE_STUDENT_STATUS: '/student-status',
+    COURSE_REQUIREMENTS_AND_ANNOTATIONS: '/requirements-and-annotations'
 }
