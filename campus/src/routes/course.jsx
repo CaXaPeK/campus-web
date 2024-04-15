@@ -13,7 +13,7 @@ import {
     Tabs,
     Tag
 } from "antd";
-import {DeleteOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
+import {CheckCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {fetchGetApi} from "../api/fetchGetApi.js";
 import {API_URLS} from "../constants/apiUrls.js";
@@ -36,9 +36,13 @@ import {axiosCourseNotificationCreate} from "../api/requests/courseNotificationC
 import {axiosCourseTeacherAdd} from "../api/requests/courseTeacherAddRequest.js";
 import {DebounceSelect, fetchUserList} from "../components/courses/selectWithUserList.jsx";
 import {axiosCourseStudentMarkEdit} from "../api/requests/courseStudentMarkEditRequest.js";
+import {useSelector} from "react-redux";
+import {axiosCourseSignUp} from "../api/requests/courseSignUpRequest.js";
+import {axiosCourseStudentStatusEdit} from "../api/requests/courseStudentStatusEditRequest.js";
 
 const CoursePage = () => {
     const { courseId } = useParams();
+    const user = useSelector((state) => state.user);
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -194,6 +198,24 @@ const CoursePage = () => {
         }
     }
 
+    const signUp = async () => {
+        try {
+            await axiosCourseSignUp(courseId);
+            setUpdates(!updates);
+        } catch (error) {
+
+        }
+    }
+
+    const changeStudentStatus = async (index, newStatus) => {
+        try {
+            await axiosCourseStudentStatusEdit(courseId, data.students[selectedStudentIndex].id, newStatus);
+            setUpdates(!updates);
+        } catch (error) {
+
+        }
+    }
+
     const [modal, contextHolder] = Modal.useModal();
     const config = {
         title: 'Подождите!',
@@ -293,8 +315,8 @@ const CoursePage = () => {
                             <Tag style={{marginLeft: 8}} color={markStatusColors[item.data.finalResult]}>{markStatusNames[item.data.finalResult]}</Tag>
                         </a> : null}
                         {item.data.status == 'InQueue' ? <div>
-                            <Button style={{marginRight: 8}} type='primary'>ПРИНЯТЬ</Button>
-                            <Button type='primary' danger>ОТКЛОНИТЬ</Button>
+                            <Button onClick={() => { setSelectedStudentIndex(index); changeStudentStatus(index, 'Accepted') }} style={{marginRight: 8}} type='primary'>ПРИНЯТЬ</Button>
+                            <Button onClick={() => { setSelectedStudentIndex(index); changeStudentStatus(index, 'Declined') }} type='primary' danger>ОТКЛОНИТЬ</Button>
                         </div> : null}
                     </List.Item>
                 )}
@@ -304,6 +326,7 @@ const CoursePage = () => {
 
     useEffect(() => {
         fetchGetApi(API_URLS.COURSE + courseId + API_URLS.COURSE_DETAILS, setData, setLoading, setAuthorized, setError, [], true);
+        console.log(data)
     }, [updates])
 
     return (
@@ -316,6 +339,13 @@ const CoursePage = () => {
                 <Flex justify='space-between'>
                     <h2>Основные данные курса</h2>
                     <div>
+                        { Array.isArray(data.teachers) &&
+                        data.teachers.find(teacher => teacher.email === localStorage.getItem('email')) === undefined &&
+                        data.students.find(student => student.email === localStorage.getItem('email')) === undefined &&
+                        data.status === "OpenForAssigning" ? (
+                            <Button type="primary" onClick={signUp} style={{background: 'green', marginRight: 8, marginBottom: 8}}><CheckCircleOutlined /> ЗАПИСАТЬСЯ</Button>
+                        ) : null}
+
                         <Button type="primary" onClick={showEditCourseModal} style={{background: 'orange', marginRight: 8, marginBottom: 8}}><EditOutlined /> ИЗМЕНИТЬ ДАННЫЕ</Button>
                         <Button type="primary" onClick={deleteCourse} danger><DeleteOutlined /> УДАЛИТЬ КУРС</Button>
                     </div>

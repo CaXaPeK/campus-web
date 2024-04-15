@@ -39,6 +39,14 @@ export const showCantAssignPreviousStatus = () => {
     showError(ERROR_MESSAGES.CANT_ASSIGN_PREVIOUS_STATUS);
 }
 
+export const showCantEditStudentStatus = () => {
+    showError(ERROR_MESSAGES.CANT_EDIT_STUDENT_STATUS);
+}
+
+export const showUserAlreadySignedUp = () => {
+    showError(ERROR_MESSAGES.USER_ALREADY_SIGNED_UP);
+}
+
 export const showUnauthorizedError = () => {
     showError(ERROR_MESSAGES.UNAUTHORIZED);
 }
@@ -101,4 +109,12 @@ export const showCourseTeacherAddSuccess = () => {
 
 export const showCourseStudentMarkEditSuccess = () => {
     showSuccess(ERROR_MESSAGES.COURSE_STUDENT_MARK_EDIT_SUCCESS);
+}
+
+export const showCourseSignUpSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_SIGNUP_SUCCESS);
+}
+
+export const showCourseStudentStatusEditSuccess = () => {
+    showSuccess(ERROR_MESSAGES.COURSE_STUDENT_STATUS_EDIT_SUCCESS);
 }

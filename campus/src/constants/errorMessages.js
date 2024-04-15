@@ -32,6 +32,8 @@ export const ERROR_MESSAGES = {
     USER_IS_ALREADY_TEACHER: 'Этот пользователь уже является преподавателем на данном курсе.',
     USER_IS_ALREADY_STUDENT: 'Этот пользователь уже является студентом на данном курсе.',
     CANT_ASSIGN_PREVIOUS_STATUS: 'Активному курсу нельзя присвоить статус «Открыт для записи».',
+    CANT_EDIT_STUDENT_STATUS: 'Студент уже не находится в очереди. Обновите страницу.',
+    USER_ALREADY_SIGNED_UP: 'Вы уже записались на этот курс.',
 
     UNAUTHORIZED: 'Вы не авторизованы.',
     ALREADY_LOGGED_OUT: 'Вы уже вышли из аккаунта.',
@@ -50,5 +52,7 @@ export const ERROR_MESSAGES = {
     COURSE_STATUS_EDIT_SUCCESS: 'Статус курса изменён.',
     COURSE_NOTIFICATION_CREATE_SUCCESS: 'Уведомление создано.',
     COURSE_TEACHER_ADD_SUCCESS: 'Преподаватель добавлен.',
-    COURSE_STUDENT_MARK_EDIT_SUCCESS: 'Отметка изменена.'
+    COURSE_STUDENT_MARK_EDIT_SUCCESS: 'Отметка изменена.',
+    COURSE_SIGNUP_SUCCESS: 'Вы записались на курс. Ожидайте подтверждения заявки.',
+    COURSE_STUDENT_STATUS_EDIT_SUCCESS: 'Статус студента изменён.'
 }
