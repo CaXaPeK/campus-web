@@ -20,7 +20,7 @@ const CourseList = ({mode, groupId, updates}) => {
 
     useEffect(() => {
         const url = mode === 'public' ? API_URLS.GROUPS + '/' + groupId : mode === 'my' ? API_URLS.MY_COURSES : API_URLS.TEACHING_COURSES;
-        fetchGetApi(url, setData, setLoading, setAuthorized, setError, [], true);
+        fetchGetApi(url, setData, setLoading, setAuthorized, setError, [], true, false);
         if (mode === 'public') {
             getGroupName(groupId, setGroupName);
         }

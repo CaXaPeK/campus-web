@@ -1,7 +1,7 @@
 import {api} from "./axiosInstance.js";
 import {showElementNotFound, showUnauthorizedError} from "../utils/messageHandler.js";
 
-export const fetchGetApi = async (url, setData, setLoading, setAuthorized, setError, stub, notifyAuthorized) => {
+export const fetchGetApi = async (url, setData, setLoading, setAuthorized, setError, stub, notifyAuthorized, changePageTitle) => {
     setLoading(true);
     const params = window.location.search;
     try {
@@ -9,6 +9,10 @@ export const fetchGetApi = async (url, setData, setLoading, setAuthorized, setEr
         setData(response.data);
         setLoading(false);
         setAuthorized(true);
+
+        if (changePageTitle) {
+            document.title = response.data.name;
+        }
     }
     catch (error) {
         setLoading(false);

@@ -20,7 +20,7 @@ const GroupList = ({isAdmin, updates, setUpdates}) => {
     })) : [];
 
     useEffect(() => {
-        fetchGetApi(API_URLS.GROUPS, setData, setLoading, setAuthorized, setError, [], true);
+        fetchGetApi(API_URLS.GROUPS, setData, setLoading, setAuthorized, setError, [], true, false);
     }, [updates])
 
     return (

@@ -15,7 +15,7 @@ const CourseCard = ({courseId, isAdmin}) => {
     const [updates, setUpdates] = useState(false);
 
     useEffect(() => {
-        fetchGetApi(API_URLS.COURSE + courseId + API_URLS.COURSE_DETAILS, setData, setLoading, setAuthorized, setError, [], true);
+        fetchGetApi(API_URLS.COURSE + courseId + API_URLS.COURSE_DETAILS, setData, setLoading, setAuthorized, setError, [], true, true);
     }, [updates])
 
     return (
