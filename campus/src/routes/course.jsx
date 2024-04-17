@@ -619,7 +619,7 @@ const CoursePage = () => {
             </Modal>
 
             <Modal
-                title={"Изменение отметки для " + (selectedMarkType == "Midterm" ? "промежуточной" : "финальной") + " аттестации"}
+                title={"Изменение отметки для " + (selectedMarkType === "Midterm" ? "промежуточной" : "финальной") + " аттестации"}
                 open={isEditMarkModalOpen}
                 onOk={handleEditMarkOk}
                 onCancel={handleCancel}
