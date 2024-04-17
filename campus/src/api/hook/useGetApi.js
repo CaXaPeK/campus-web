@@ -34,7 +34,7 @@ export const useGetApi = (stub, url, notifyAuthorized) => {
         };
 
         fetch();
-    }, );
+    }, [notifyAuthorized, params, stub, url]);
 
     return [data, loading, authorized, error];
 }

@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import Navbar from '../components/navbar/Navbar';
-import { Flex, Layout, Space } from 'antd';
+import { Flex, Layout } from 'antd';
 import {ROUTES} from "../constants/routes.js";
 const { Footer, Content } = Layout;
 
@@ -15,7 +15,6 @@ export const Root = () => {
           <Outlet />
         </Flex>
       </Content>
-      {/* <Space align="center"><Outlet /></Space> */}
       <Footer>Made by <a href='https://vk.com/ttydrus'>Sasha</a></Footer>
     </Layout>
   );
