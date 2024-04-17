@@ -1,3 +1,5 @@
+**Как запустить:**
+
 cd campus
 
 npm install
