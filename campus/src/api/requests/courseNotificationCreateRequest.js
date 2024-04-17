@@ -13,7 +13,7 @@ export const axiosCourseNotificationCreate = async (id, text, isImportant) => {
         return response;
     }
     catch (error) {
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
         else {

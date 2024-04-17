@@ -18,19 +18,18 @@ export const axiosCoursePost = async (groupId, name, startYear, maximumStudentsC
     }
 
     try {
-        console.log(data)
         const response = await api.post(API_URLS.GROUPS + '/' + groupId, data);
         showCourseCreateSuccess();
         return response;
     }
     catch (error) {
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
         else {
             showError(error.response.data.message)
         }
-        console.log(error)
+
         throw error;
     }
 }

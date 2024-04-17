@@ -20,16 +20,17 @@ export const axiosRegistration = async (fullName, birthDate, email, password, co
         await api.post(API_URLS.REGISTRATION, data);
         const token = await api.post(API_URLS.LOGIN, loginData);
         localStorage.setItem("token", token.data.token);
+        localStorage.setItem("email", data.email);
         window.location.href = "/";
     } catch (error) {
-        console.log(error);
-        var errorMessage = error.response.data.message;
-        if (errorMessage == "User with this email is already registered.") {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "User with this email is already registered.") {
             showEmailTaken();
         }
         else {
-            errorMessage = error.response.data.message;
             showError(errorMessage);
         }
+
+        throw error;
     }
 }

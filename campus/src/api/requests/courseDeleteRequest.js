@@ -13,10 +13,10 @@ export const axiosCourseDelete = async (id) => {
         return response;
     }
     catch (error) {
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
-        else if (error.response.status == 404) {
+        else if (error.response.status === 404) {
             showCourseNotFound();
         }
         else {

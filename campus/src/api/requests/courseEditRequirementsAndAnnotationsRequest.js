@@ -14,7 +14,7 @@ export const axiosCourseRequirementsAndAnnotationsEdit = async (courseId, requir
         return response;
     }
     catch (error) {
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
         else {

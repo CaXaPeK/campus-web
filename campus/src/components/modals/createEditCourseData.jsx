@@ -5,7 +5,6 @@ import ReactQuill from "react-quill";
 import {DebounceSelect, fetchUserList} from "../courses/selectWithUserList.jsx";
 import {axiosCoursePost} from "../../api/requests/coursePostRequest.js";
 import {useState} from "react";
-import * as createForm from "react-dom/test-utils";
 
 export const createEditCourseData = ({isEditModal, updates, setUpdates, entityId}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);

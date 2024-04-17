@@ -15,13 +15,13 @@ export const axiosCourseTeacherAdd = async (courseId, teacherId) => {
     catch (error) {
         const errorMessage = error.response.data.message;
 
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
-        else if (errorMessage == "This user is already teaching at this course.") {
+        else if (errorMessage === "This user is already teaching at this course.") {
             showUserIsAlreadyTeacher();
         }
-        else if (errorMessage == "Cannot assign teacher role to a student already attending the course.") {
+        else if (errorMessage === "Cannot assign teacher role to a student already attending the course.") {
             showUserIsAlreadyStudent();
         }
         else {

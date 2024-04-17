@@ -15,7 +15,7 @@ export const axiosCourseSignUp = async (id) => {
     catch (error) {
         const errorMessage = error.response.data.message;
 
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
         else if (errorMessage === "User is already signed up for this course.") {

@@ -16,14 +16,13 @@ export const axiosCourseStatusEdit = async (id, status) => {
     catch (error) {
         const errorMessage = error.response.data.message;
 
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
-        else if (errorMessage == "Course status cannot be changed to a previous one.") {
+        else if (errorMessage === "Course status cannot be changed to a previous one.") {
             showCantAssignPreviousStatus();
         }
         else {
-            console.log(error)
             showError(error.response.data.message)
         }
         throw error;

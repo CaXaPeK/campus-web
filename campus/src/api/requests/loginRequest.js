@@ -15,14 +15,14 @@ export const axiosLogin = async (email, password) => {
 
         window.location.href = "/";
     } catch (error) {
-        console.log(error);
-        var errorMessage = error.response.data.message;
-        if (errorMessage == "Login failed") {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Login failed") {
             showLoginFailed();
         }
         else {
-            errorMessage = error.response.data.message;
             showError(errorMessage);
         }
+
+        throw error;
     }
   };

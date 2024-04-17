@@ -13,11 +13,13 @@ export const axiosProfilePut = async (fullName, birthDate) => {
         showProfileEditSuccess();
     }
     catch (error) {
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
         else {
             showError(error.response.data.message);
         }
+
+        throw error;
     }
 }

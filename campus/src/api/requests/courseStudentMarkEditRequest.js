@@ -14,12 +14,9 @@ export const axiosCourseStudentMarkEdit = async (courseId, studentId, markType, 
     catch (error) {
         const errorMessage = error.response.data.message;
 
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
-        //else if (errorMessage == "Course status cannot be changed to a previous one.") {
-        //    showCantAssignPreviousStatus();
-        //}
         else {
             showError(errorMessage)
         }

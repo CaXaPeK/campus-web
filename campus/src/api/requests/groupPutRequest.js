@@ -13,7 +13,7 @@ export const axiosGroupPut = async (id, newName) => {
         return response;
     }
     catch (error) {
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
             showUnauthorizedError();
         }
         else {

@@ -23,18 +23,18 @@ export const useGetApi = (stub, url, notifyAuthorized) => {
                 setError(error);
                 setAuthorized(false);
 
-                if (error.response.status == 401 && notifyAuthorized) {
+                if (error.response.status === 401 && notifyAuthorized) {
                     showUnauthorizedError();
                 }
 
-                if (error.response.status == 404) {
+                if (error.response.status === 404) {
                     showElementNotFound();
                 }
             }
         };
 
         fetch();
-    }, []);
+    }, );
 
     return [data, loading, authorized, error];
 }
