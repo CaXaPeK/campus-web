@@ -1,5 +1,4 @@
 import { Image } from "antd";
-import {ROUTES} from "../constants/routes.js";
 
 const Home = () => {
     return (
