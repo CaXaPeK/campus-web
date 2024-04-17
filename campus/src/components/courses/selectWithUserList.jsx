@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 import {API_URLS} from "../../constants/apiUrls.js";
@@ -48,8 +48,7 @@ export function DebounceSelect({ fetchOptions, debounceTimeout = 800, ...props }
     );
 }
 
-export async function fetchUserList(username) {
-    console.log('fetching user', username);
+export async function fetchUserList() {
     try {
         const response = await api.get(API_URLS.BASE + API_URLS.USERS);
         const userList = response.data.map((user) => ({
